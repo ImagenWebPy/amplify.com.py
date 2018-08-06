@@ -89,20 +89,10 @@
                                 </div>
                             </div>
                             <div class="col-md-2 col-xs-5 width-auto">
-                                <div class="header-searchbar">
-                                    <a href="#search-header" class="header-search-form text-white"><i class="fas fa-search search-button"></i></a>
-                                    <!-- search input-->
-                                    <form id="search-header" method="post" action="search-result.html" name="search-header" class="mfp-hide search-form-result">
-                                        <div class="search-form position-relative">
-                                            <button type="submit" class="fas fa-search close-search search-button"></button>
-                                            <input type="text" name="search" class="search-input" placeholder="Enter your keywords..." autocomplete="off">
-                                        </div>
-                                    </form>
-                                </div>
                                 <div class="header-social-icon xs-display-none">
-                                    <a href="https://www.facebook.com/" title="Facebook" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                                    <a href="https://twitter.com/" title="Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
-                                    <a href="https://dribbble.com/" title="Dribbble" target="_blank"><i class="fab fa-dribbble"></i></a>
+                                    <?php foreach ($this->redes as $item): ?>
+                                        <a href="<?= utf8_encode($item['url']); ?>" title="<?= utf8_encode($item['descripcion']); ?>" target="_blank"><i class="<?= utf8_encode($item['fontawesome']); ?>" aria-hidden="true"></i></a>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>

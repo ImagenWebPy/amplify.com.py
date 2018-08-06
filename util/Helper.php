@@ -576,4 +576,169 @@ class Helper {
     /*     * ***************************
      * FUNCIONES DEL INHERENTES AL SISTEMA
      * ****************************** */
+
+    /**
+     * Funcion que retorna los enlaces a redes sociales,
+     * parametro opcional cantidad de resultados ($limit)
+     * @param int $limit
+     * @return array
+     */
+    public function obtenerRedes($limit = NULL) {
+        $limite = (!empty($limit)) ? "LIMIT $limit" : '';
+        $sql = $this->db->select("SELECT
+                                        descripcion,
+                                        url,
+                                        fontawesome
+                                FROM
+                                        redes
+                                WHERE
+                                        estado = 1
+                                ORDER BY
+                                        orden ASC
+                                $limite");
+        return $sql;
+    }
+
+    /**
+     * Funcion que retorna el contenido del slider
+     * @return array
+     */
+    public function obtenerSlider() {
+        $sql = $this->db->select("SELECT
+                                        imagen,
+                                        titulo,
+                                        texto_complementario
+                                FROM
+                                        slider
+                                WHERE
+                                        estado = 1
+                                ORDER BY
+                                        orden ASC");
+        return $sql;
+    }
+
+    /**
+     * Funcion que retorna el contenido de la seccion 1 de la pagina de inicio
+     * @return array
+     */
+    public function index_seccion_1() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        contenido
+                                FROM
+                                        index_seccion_1
+                                WHERE
+                                        estado = 1
+                                AND id = 1;");
+        return $sql[0];
+    }
+
+    public function index_seccion_2() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        contenido,
+                                        fontawesome
+                                FROM
+                                        index_seccion_2
+                                WHERE
+                                        estado = 1
+                                ORDER BY
+                                        orden ASC");
+        return $sql;
+    }
+
+    /**
+     * Funcion que retorna el contenido de la seccion 3 de la pagina de inicio
+     * @return array
+     */
+    public function index_seccion_3() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        subtitulo,
+                                        descripcion,
+                                        imagen,
+                                        titulo_cuadro,
+                                        descripcion_cuadro
+                                FROM
+                                        index_seccion_3
+                                WHERE
+                                        id = 1
+                                AND estado = 1");
+        return $sql[0];
+    }
+
+    /**
+     * Funcion que retorna el contenido de la seccion 4 de la pagina de inicio
+     * @return array
+     */
+    public function index_seccion_4() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        subtitulo,
+                                        descripcion,
+                                        imagen
+                                FROM
+                                        index_seccion_4
+                                WHERE
+                                        id = 1
+                                AND estado = 1");
+        return $sql[0];
+    }
+
+    /**
+     * Funcion que retorna el contenido de la seccion 5 de la pagina de inicio
+     * @return array
+     */
+    public function index_seccion_5() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        subtitulo
+                                FROM
+                                        index_seccion_5
+                                WHERE
+                                        id = 1
+                                AND estado = 1");
+        return $sql[0];
+    }
+
+    /**
+     * Funcion que retorna los colaboradores de la empresa por orden ascendente
+     * @return array
+     */
+    public function mostrar_equipo_trabajo() {
+        $sql = $this->db->select("SELECT
+                                        id,
+                                        nombre,
+                                        cargo,
+                                        email,
+                                        telefono,
+                                        imagen,
+                                        mostrar_email,
+                                        mostrar_telefono
+                                FROM
+                                        equipo
+                                WHERE
+                                        estado = 1
+                                ORDER BY
+                                        orden ASC");
+        return $sql;
+    }
+
+    public static function obtenerRedesEquipo($id_equipo) {
+        require_once 'util/Helper.php';
+        $db = new Database(DB_TYPE, DB_HOST, DB_NAME, DB_USER, DB_PASS);
+        $sql = $db->select("SELECT
+                                        red_social,
+                                        url,
+                                        fontawesome
+                                FROM
+                                        equipo_redsocial
+                                WHERE
+                                        id_equipo = $id_equipo
+                                AND estado = 1
+                                ORDER BY
+                                        orden ASC");
+        return $sql;
+    }
+
 }
