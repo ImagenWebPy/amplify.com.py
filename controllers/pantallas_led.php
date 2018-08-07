@@ -6,8 +6,33 @@ class Pantallas_led extends Controller {
         parent::__construct();
     }
 
-    public function inde() {
-        
+    public function index() {
+        #PARAMETRO OBLIGATORIOS
+        $this->view->title = TITLE . 'Pantallas Led';
+        $this->view->description = 'Meta Descripcion Pantallas Led';
+        $this->view->keywords = 'Meta Keywords Pantallas Led';
+        $this->view->redes = $this->helper->obtenerRedes(3);
+        $this->view->pagina = $this->pagina;
+        #FIN PARAMETROS OBLIGATORIOS
+
+        $this->view->contenido = $this->model->contenido();
+
+        #cargamos la vista
+        $this->view->render('header');
+        $this->view->render('pantallas_led/index');
+        $this->view->render('footer');
+    }
+
+    public function cargarPantallasLed() {
+        $url = $this->helper->getUrl();
+        if (!empty($url[2])) {
+            $pagina = $url[2];
+        } else {
+            $pagina = 1;
+        }
+        header('Content-type: application/json; charset=utf-8');
+        $datos = $this->model->cargarPantallasLed($pagina);
+        echo json_encode($datos);
     }
 
 }

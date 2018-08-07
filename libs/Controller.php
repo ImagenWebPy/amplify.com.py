@@ -3,12 +3,12 @@
 class Controller {
 
     public $helper = '';
-    public $page = '';
+    public $pagina = '';
 
     function __construct() {
         $this->view = new View();
         $this->helper = new Helper;
-        $this->page = $this->helper->getPage();
+        $this->pagina = $this->helper->getPage();
     }
 
     /**

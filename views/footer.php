@@ -1,3 +1,6 @@
+<?php if (empty($this->pagina)): ?>
+    </div>
+<?php endif; ?>
 <!-- start footer --> 
 <footer class="footer-classic-dark bg-extra-dark-gray padding-five-bottom xs-padding-30px-bottom">
     <div class="bg-dark-footer padding-50px-tb xs-padding-30px-tb">
@@ -109,7 +112,7 @@
 <a class="scroll-top-arrow" href="javascript:void(0);"><i class="ti-arrow-up"></i></a>
 <!-- end scroll to top -->
 <!-- javascript libraries -->
-<script type="text/javascript" src="<?= URL; ?>public/js/jquery.js"></script>
+
 <script type="text/javascript" src="<?= URL; ?>public/js/modernizr.js"></script>
 <script type="text/javascript" src="<?= URL; ?>public/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?= URL; ?>public/js/jquery.easing.1.3.js"></script>
@@ -169,5 +172,6 @@
 <script type="text/javascript" src="revolution/js/extensions/revolution.extension.video.min.js"></script>-->
 <!-- setting -->
 <script type="text/javascript" src="<?= URL; ?>public/js/main.js"></script>
+
 </body>
 </html>

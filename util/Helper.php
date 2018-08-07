@@ -191,17 +191,16 @@ class Helper {
      * @param string $section (ruta del mvc a paginar)
      * @return string
      */
-    public function mostrarPaginador($per_page, $page, $table, $section, $condicion = NULL, $inPage = FALSE) {
-        $where = '';
+    public function mostrarPaginador($per_page, $page, $table, $controlador, $section, $condicion = NULL, $inPage = FALSE, $getParameters = NULL) {
+        $parametros = (!empty($getParameters)) ? implode(',', $getParameters) : '';
+        $metodo = $section;
         if ($inPage == TRUE) {
-            $id_paciente = explode('/', $section);
-            $id_paciente = end($id_paciente);
-            $where = 'and id_paciente = ' . $id_paciente;
+            $metodo = $section;
         }
         if (!empty($condicion)) {
-            $query = $this->db->select("SELECT COUNT(*) as totalCount $condicion $where");
+            $query = $this->db->select("SELECT COUNT(*) as totalCount $condicion");
         } else {
-            $query = $this->db->select("SELECT COUNT(*) as totalCount FROM $table where estado = 1 $where");
+            $query = $this->db->select("SELECT COUNT(*) as totalCount FROM $table where estado = 1");
         }
         $total = $query[0]['totalCount'];
         $adjacents = "2";
@@ -215,15 +214,16 @@ class Helper {
         $lpm1 = $setLastpage - 1;
 
         $paging = "";
+        #si la ultima pagina es mayor a 1
         if ($setLastpage > 1) {
             $paging .= "<ul class='pagination'>";
             $paging .= "<li class='active'>Página $page de $setLastpage</li>";
-            if ($setLastpage < 7 + ($adjacents * 2)) {
+            if ($setLastpage < 5 + ($adjacents * 2)) {
                 for ($counter = 1; $counter <= $setLastpage; $counter++) {
                     if ($counter == $page)
                         $paging .= "<li class='active'><a href='#'>$counter</a></li>";
                     else
-                        $paging .= '<li><a ' . $this->urlPaginador($section, $counter, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
+                        $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $counter, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
                 }
             }
             elseif ($setLastpage > 5 + ($adjacents * 2)) {
@@ -232,44 +232,42 @@ class Helper {
                         if ($counter == $page)
                             $paging .= '<li class="active"><a href="#">' . $counter . '</a></li>';
                         else
-                            $paging .= '<li><a  ' . $this->urlPaginador($section, $counter, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
+                            $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, $counter, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
                     }
                     $paging .= "<li class='dot'>...</li>";
-                    $paging .= '<li><a ' . $this->urlPaginador($section, $lpm1, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $lpm1 . '</a></li>';
-                    $paging .= '<li><a ' . $this->urlPaginador($section, $setLastpage, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $setLastpage . '</a></li>';
+                    $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $lpm1, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $lpm1 . '</a></li>';
+                    $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $setLastpage, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $setLastpage . '</a></li>';
                 }
                 elseif ($setLastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2)) {
-                    $paging .= '<li><a ' . $this->urlPaginador($section, 1, $inPage) . ' data-size="small" data-color="secondary" data-border>1</a></li>';
-                    $paging .= '<li><a ' . $this->urlPaginador($section, 2, $inPage) . ' data-size="small" data-color="secondary" data-border>2</a></li>';
+                    $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, 1, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>1</a></li>';
+                    $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, 2, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>2</a></li>';
                     $paging .= "<li class='dot'>...</li>";
                     for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++) {
                         if ($counter == $page)
-                            $paging .= "<li class='active'><a href='#'>$counter</a></li>"
-                            ;
+                            $paging .= "<li class='active'><a href='#'>$counter</a></li>";
                         else
-                            $paging .= '<li><a ' . $this->urlPaginador($section, $lpm1, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
+                            $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $counter, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
                     }
                     $paging .= "<li class='dot'>..</li>";
-                    $paging .= '<li><a  ' . $this->urlPaginador($section, $lpm1, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $lpm1 . '</a></li>';
-                    $paging .= '<li><a  ' . $this->urlPaginador($section, $setLastpage, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $setLastpage . '</a></li>';
+                    $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, $lpm1, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $lpm1 . '</a></li>';
+                    $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, $setLastpage, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $setLastpage . '</a></li>';
                 }
                 else {
-                    $paging .= '<li><a  ' . $this->urlPaginador($section, 1, $inPage) . ' data-size="small" data-color="secondary" data-border>1</a></li>';
-                    $paging .= '<li><a  ' . $this->urlPaginador($section, 2, $inPage) . ' data-size="small" data-color="secondary" data-border>2</a></li>';
+                    $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, 1, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>1</a></li>';
+                    $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, 2, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>2</a></li>';
                     $paging .= "<li class = 'dot'>..</li>";
                     for ($counter = $setLastpage - (2 + ($adjacents * 2)); $counter <= $setLastpage; $counter++) {
                         if ($counter == $page)
-                            $paging .= "<li class='active'><a href='#'>$counter</a></li>"
-                            ;
+                            $paging .= "<li class='active'><a href='#'>$counter</a></li>";
                         else
-                            $paging .= '<li><a  ' . $this->urlPaginador($section, $lpm1, $inPage) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
+                            $paging .= '<li><a  ' . $this->urlPaginador($controlador, $metodo, $counter, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>' . $counter . '</a></li>';
                     }
                 }
             }
 
             if ($page < $counter - 1) {
-                $paging .= '<li><a ' . $this->urlPaginador($section, $next, $inPage) . ' data-size="small" data-color="secondary" data-border >Siguiente</a></li>';
-                $paging .= '<li><a ' . $this->urlPaginador($section, $setLastpage, $inPage) . ' data-size="small" data-color="secondary" data-border>Ultima</a></li>';
+                $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $next, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border >Siguiente</a></li>';
+                $paging .= '<li><a ' . $this->urlPaginador($controlador, $metodo, $setLastpage, $inPage, $parametros) . ' data-size="small" data-color="secondary" data-border>Ultima</a></li>';
             } else {
                 $paging .= "<li class='active'><a href='#'>Siguiente</a></li>";
                 $paging .= "<li class='active'><a href='#'>Ultima</a></li>";
@@ -277,15 +275,16 @@ class Helper {
 
             $paging .= "</ul>";
         }
-
         return $paging;
     }
 
-    private function urlPaginador($section, $counter, $inPage) {
+    private function urlPaginador($controlador, $section, $counter, $inPage, $parametros = NULL) {
         if ($inPage == FALSE) {
-            $enlace = 'href="' . URL . $section . '/' . $counter . '"';
+            $enlace = 'href="' . URL . $controlador . '/' . $section . '/' . $counter . '/' . $parametros . '"';
         } else {
-            $enlace = 'onclick="getresult(\'' . URL . $section . '/' . $counter . '\')"';
+            $url = explode('/', $section);
+            $funcion = $url[0];
+            $enlace = 'onclick="' . $funcion . '(\'' . URL . $controlador . '/' . $section . '/' . $counter . '/' . $parametros . '\')"';
         }
         return $enlace;
     }

@@ -47,9 +47,13 @@
         <!--[if IE]>
             <script src="js/html5shiv.js"></script>
         <![endif]-->
+        <script type="text/javascript" src="<?= URL; ?>public/js/jquery.js"></script>
+        <script type="text/javascript" src="<?= URL; ?>public/js/custom.js"></script>
     </head>
     <body>
-        <div class="box-layout">
+        <?php if (empty($this->pagina)): ?>
+            <div class="box-layout">
+            <?php endif; ?>
             <!-- start header -->
             <header>
                 <!-- start navigation -->
@@ -73,10 +77,10 @@
                                         <li class="dropdown simple-dropdown">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);">Carteles Tradicionales</a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="<?= URL; ?>">Asunción</a></li>
-                                                <li><a href="<?= URL; ?>">Gran Asunción</a></li>
-                                                <li><a href="<?= URL; ?>">Ruteros</a></li>
-                                                <li><a href="<?= URL; ?>">Urbanos</a></li>
+                                                <li><a href="<?= URL; ?>carteles_tradicionales/asuncion">Asunción</a></li>
+                                                <li><a href="<?= URL; ?>carteles_tradicionales/gran_asuncion">Gran Asunción</a></li>
+                                                <li><a href="<?= URL; ?>carteles_tradicionales/ruteros">Ruteros</a></li>
+                                                <li><a href="<?= URL; ?>carteles_tradicionales/urbanos">Urbanos</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="<?= URL; ?>iconicos">Icónicos</a></li>
