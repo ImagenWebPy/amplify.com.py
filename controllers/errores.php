@@ -7,12 +7,18 @@ class Errores extends Controller {
     }
 
     public function index() {
-        $this->view->description = "";
-        $this->view->keywords = "";
-        $this->view->title = TITLE . '404 - Opps, la pagina solicitada no existe.';
-        $this->view->render('error/inc/header');
+        #PARAMETRO OBLIGATORIOS
+        $this->view->title = TITLE . 'Error';
+        $this->view->description = 'Meta Descripcion Buses';
+        $this->view->keywords = 'Meta Keywords Buses';
+        $this->view->redes = $this->helper->obtenerRedes(3);
+        $this->view->pagina = $this->pagina;
+        #FIN PARAMETROS OBLIGATORIOS
+
+        $this->view->contenido = $this->helper->getErrorContenido();
+        $this->view->render('header');
         $this->view->render('error/index');
-        $this->view->render('error/inc/footer');
+        $this->view->render('footer');
     }
 
 }

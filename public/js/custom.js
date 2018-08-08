@@ -75,3 +75,33 @@ function cargarContenidoUrbanos(url) {
         {}
     });
 }
+function cargarIconicos(url) {
+    $.ajax({
+        url: url,
+        type: "GET",
+        beforeSend: function ()
+        {},
+        success: function (data) {
+            $("#divIconicos").html("");
+            $("#divIconicos").html(data.contenido);
+            $("#paginador").html(data.paginador);
+        },
+        error: function ()
+        {}
+    });
+}
+function cargarBuses(url) {
+    $.ajax({
+        url: url,
+        type: "GET",
+        beforeSend: function ()
+        {},
+        success: function (data) {
+            $("#divBuses").html("");
+            $("#divBuses").html(data.contenido);
+            $("#paginador").html(data.paginador);
+        },
+        error: function ()
+        {}
+    });
+}

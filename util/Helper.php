@@ -740,4 +740,17 @@ class Helper {
         return $sql;
     }
 
+    public function getErrorContenido() {
+        $sql = $this->db->select("SELECT
+                                        titulo,
+                                        texto_1,
+                                        texto_2,
+                                        imagen
+                                FROM
+                                        error
+                                WHERE
+                                        id = 1");
+        return $sql[0];
+    }
+
 }
