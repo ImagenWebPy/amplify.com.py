@@ -4,20 +4,37 @@
         <div class="swiper-wrapper">
             <?php foreach ($this->slider as $item): ?>
                 <!-- start slider item -->
-                <div class="swiper-slide equalize xs-equalize-auto">
-                    <div class="col-md-6 col-sm-6 col-xs-12 bg-deep-pink height-700px xs-height-250px">
-                        <div class="display-table width-100 height-100">
-                            <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
-                                <?php if (!empty($item['titulo'])): ?>
-                                    <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
-                                <?php endif; ?>
-                                <?php if (!empty($item['texto_complementario'])): ?>
-                                    <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
-                                <?php endif; ?>
+                <!--                <div class="swiper-slide equalize xs-equalize-auto">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 bg-deep-pink height-700px xs-height-250px">
+                                        <div class="display-table width-100 height-100">
+                                            <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
+                <?php if (!empty($item['titulo'])): ?>
+                                                            <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
+                <?php endif; ?>
+                <?php if (!empty($item['texto_complementario'])): ?>
+                                                            <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
+                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 no-padding-lr cover-background height-700px xs-height-400px" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');"></div>
+                                </div>-->
+                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');">
+                    <div class="container-fluid slider-half-screen position-relative">
+                        <div class="slider-typography text-left">
+                            <div class="slider-text-middle-main">
+                                <div class="slider-text-middle padding-ten-left xs-padding-five-left">
+                                    <?php if (!empty($item['texto_complementario'])): ?>
+                                        <span class="text-middle-line text-deep-pink display-block width-20 sm-text-middle-line xs-width-50"><?= utf8_encode($item['texto_complementario']); ?></span>
+                                    <?php endif; ?>
+                                    <?php if (!empty($item['titulo'])): ?>
+                                        <span class="title-large alt-font text-extra-dark-gray font-weight-700 width-25 margin-40px-tb xs-margin-20px-tb display-block letter-spacing-minus-2 sm-width-60"><?= utf8_encode($item['titulo']); ?></span>
+                                    <?php endif; ?>
+                                    <!--<a href="single-project-page-01.html" class="btn btn-small btn-dark-gray">Explore Work</a>-->
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12 no-padding-lr cover-background height-700px xs-height-400px" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');"></div>
                 </div>
                 <!-- end slider item -->
             <?php endforeach; ?>
