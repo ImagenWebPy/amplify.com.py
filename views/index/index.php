@@ -9,10 +9,10 @@
                                         <div class="display-table width-100 height-100">
                                             <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
                 <?php if (!empty($item['titulo'])): ?>
-                                                            <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
+                                                                <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
                 <?php endif; ?>
                 <?php if (!empty($item['texto_complementario'])): ?>
-                                                            <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
+                                                                <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -114,7 +114,7 @@
     <section class="no-padding wow fadeIn bg-extra-dark-gray">
         <div class="container-fluid">
             <div class="row equalize sm-equalize-auto">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 cover-background sm-height-500px xs-height-350px wow fadeIn" style="background-image:url('<?= URL; ?>public/images/<?= utf8_encode($this->index_seccion_3['imagen']); ?>');"><div class="xs-height-400px"></div></div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 cover-background sm-height-500px xs-height-350px wow fadeIn" style="background-image:url('<?= URL; ?>public/images/<?= utf8_encode($this->index_seccion_4['imagen']); ?>');"><div class="xs-height-400px"></div></div>
                 <div class="col-md-6 col-sm-12 col-xs-12 display-table wow fadeInRight last-paragraph-no-margin sm-text-center">
                     <div class="display-table-cell vertical-align-middle padding-fifteen-all md-padding-ten-all sm-padding-90px-all xs-text-center xs-no-padding-lr xs-padding-40px-tb">
                         <span class="text-medium margin-20px-bottom display-block alt-font"><?= utf8_encode($this->index_seccion_3['subtitulo']); ?></span>

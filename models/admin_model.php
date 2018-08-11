@@ -99,6 +99,18 @@ class Admin_Model extends Model {
                         . '<td>' . $estado . '</td>'
                         . '<td>' . $btnEditar . '</td>';
                 break;
+            case 'seccion2':
+                if ($sql[0]['estado'] == 1) {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+                } else {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+                }
+                $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTSeccion2"><i class="fa fa-edit"></i> Editar </a>';
+                $data = '<td>' . $sql[0]['orden'] . '</td>'
+                        . '<td>' . utf8_encode($sql[0]['titulo']) . '</td>'
+                        . '<td>' . $estado . '</td>'
+                        . '<td>' . $btnEditar . '</td>';
+                break;
         }
         return $data;
     }
@@ -354,6 +366,318 @@ class Admin_Model extends Model {
             'imagen' => $imagenes['imagenes']
         );
         $this->db->update('slider', $update, "id = $id");
+    }
+
+    public function datosSeccion($seccion) {
+        $sql = $this->db->select("select * from index_seccion_" . $seccion . " where id = 1");
+        return $sql[0];
+    }
+
+    public function frmEditarIndexSeccion1($datos) {
+        $id = 1;
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'contenido' => utf8_decode($datos['contenido']),
+            'estado' => $estado
+        );
+        $this->db->update('index_seccion_1', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'mensaje' => 'Se ha actualizado el contenido de la sección 1'
+        );
+        return $data;
+    }
+
+    public function listadoDTSeccion2() {
+        $sql = $this->db->select("SELECT * FROM index_seccion_2 ORDER BY orden ASC;");
+        $datos = array();
+        foreach ($sql as $item) {
+            $id = $item['id'];
+            if ($item['estado'] == 1) {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+            } else {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+            }
+            $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTSeccion2"><i class="fa fa-edit"></i> Editar </a>';
+            array_push($datos, array(
+                "DT_RowId" => "seccion2_$id",
+                'orden' => $item['orden'],
+                'titulo' => utf8_encode($item['titulo']),
+                'estado' => $estado,
+                'editar' => $btnEditar
+            ));
+        }
+        $json = '{"data": ' . json_encode($datos) . '}';
+        return $json;
+    }
+
+    public function modalEditarDTSeccion2($datos) {
+        $id = $datos['id'];
+        $sql = $this->db->select("SELECT * FROM `index_seccion_2` where id = $id");
+        $checked = "";
+        if ($sql[0]['estado'] == 1)
+            $checked = 'checked';
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmEditarIndexSeccion2" method="POST">
+                            <input type="hidden" name="id" value="' . $id . '">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Titulo</label>
+                                    <input type="text" name="titulo" class="form-control" value="' . utf8_encode($sql[0]['titulo']) . '">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contenido</label>
+                                    <textarea name="contenido" class="form-control">' . utf8_encode($sql[0]['contenido']) . '</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Orden</label>
+                                    <input type="text" name="orden" class="form-control" value="' . utf8_encode($sql[0]['orden']) . '">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="estado" value="1" ' . $checked . '> <i></i> Mostrar </label></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    Para cambiar el icono, tiene que buscar uno en la siguiente pagina <a href="https://fontawesome.com/icons" target="_blank">Font Awesome</a>. Ingrese al icono, busque el siguiente texto <br><strong>&#60;i class="fab fa-accessible-icon"&#62;&#60;/i&#62;</strong> y copie solamente lo que se encuentra dentro de la etiqueta class. Ej.<strong>fab fa-accessible-icon</strong>
+                                </div>
+                                <div class="form-group">
+                                    <label>Font Awesome</label>
+                                    <input type="text" name="fontawesome" class="form-control" value="' . utf8_encode($sql[0]['fontawesome']) . '">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="clearfix"></div>
+                            <div class="btn-submit">
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">Editar Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green"
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Editar Item de la Seccion 2',
+            'content' => $modal
+        );
+        return json_encode($data);
+    }
+
+    public function frmEditarIndexSeccion2($datos) {
+        $id = $datos['id'];
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'contenido' => utf8_decode($datos['contenido']),
+            'fontawesome' => utf8_decode($datos['fontawesome']),
+            'orden' => utf8_decode($datos['orden']),
+            'estado' => $estado
+        );
+        $this->db->update('index_seccion_2', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'content' => $this->rowDataTable('seccion2', 'index_seccion_2', $id),
+            'mensaje' => 'Se ha actualizado el contenido del Item de la sección 2',
+            'id' => $id
+        );
+        return $data;
+    }
+
+    public function modalAgregarItemSeccion2() {
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Agregar Datos</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmAgregarIndexSeccionItem2" method="POST">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Titulo</label>
+                                    <input type="text" name="titulo" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contenido</label>
+                                    <textarea name="contenido" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Orden</label>
+                                    <input type="text" name="orden" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="estado" value="1"> <i></i> Mostrar </label></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    Para cambiar el icono, tiene que buscar uno en la siguiente pagina <a href="https://fontawesome.com/icons" target="_blank">Font Awesome</a>. Ingrese al icono, busque el siguiente texto <br><strong>&#60;i class="fab fa-accessible-icon"&#62;&#60;/i&#62;</strong> y copie solamente lo que se encuentra dentro de la etiqueta class. Ej.<strong>fab fa-accessible-icon</strong>
+                                </div>
+                                <div class="form-group">
+                                    <label>Font Awesome</label>
+                                    <input type="text" name="fontawesome" class="form-control" value="">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="clearfix"></div>
+                            <div class="btn-submit">
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">Agregar Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green"
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Agregar Item',
+            'content' => $modal
+        );
+        return $data;
+    }
+
+    public function frmAgregarIndexSeccionItem2($datos) {
+        $this->db->insert('index_seccion_2', array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'contenido' => utf8_decode($datos['contenido']),
+            'fontawesome' => utf8_decode($datos['fontawesome']),
+            'orden' => utf8_decode($datos['orden']),
+            'estado' => (!empty($datos['estado'])) ? $datos['estado'] : 0
+        ));
+        $id = $this->db->lastInsertId();
+        $sql = $this->db->select("select * from index_seccion_2 where id = $id");
+        if ($sql[0]['estado'] == 1) {
+            $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+        } else {
+            $estado = '<a class="pointer btnCambiarEstado" data-seccion="seccion2" data-rowid="seccion2_" data-tabla="index_seccion_2" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+        }
+        $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTSeccion2"><i class="fa fa-edit"></i> Editar </a>';
+        $data = array(
+            'type' => 'success',
+            'content' => '<tr id="seccion2_' . $id . '" role="row" class="odd">'
+            . '<td class="sorting_1">' . $sql[0]['orden'] . '</td>'
+            . '<td>' . utf8_encode($sql[0]['titulo']) . '</td>'
+            . '<td>' . $estado . '</td>'
+            . '<td>' . $btnEditar . '</td>'
+            . '</tr>',
+            'mensaje' => 'Se ha agregado correctamente Item de la seccion 2'
+        );
+        return $data;
+    }
+
+    public function frmEditarIndexSeccion3($datos) {
+        $id = 1;
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'subtitulo' => utf8_decode($datos['subtitulo']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'titulo_cuadro' => utf8_decode($datos['titulo_cuadro']),
+            'descripcion_cuadro' => utf8_decode($datos['descripcion_cuadro']),
+            'estado' => $estado
+        );
+        $this->db->update('index_seccion_3', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'mensaje' => 'Se ha actualizado el contenido de la sección 3'
+        );
+        return $data;
+    }
+
+    public function frmEditarIndexSeccion4($datos) {
+        $id = 1;
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'subtitulo' => utf8_decode($datos['subtitulo']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'estado' => $estado
+        );
+        $this->db->update('index_seccion_4', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'mensaje' => 'Se ha actualizado el contenido de la sección 4'
+        );
+        return $data;
+    }
+
+    public function frmEditarIndexSeccion5($datos) {
+        $id = 1;
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'titulo' => utf8_decode($datos['titulo']),
+            'subtitulo' => utf8_decode($datos['subtitulo']),
+            'estado' => $estado
+        );
+        $this->db->update('index_seccion_5', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'mensaje' => 'Se ha actualizado el contenido de la sección 5'
+        );
+        return $data;
+    }
+
+    public function uploadImgSeccion3($data) {
+        $id = 1;
+        $update = array(
+            'imagen' => $data['imagen']
+        );
+        $this->db->update('index_seccion_3', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgSeccion4($data) {
+        $id = 1;
+        $update = array(
+            'imagen' => $data['imagen']
+        );
+        $this->db->update('index_seccion_4', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
     }
 
 }
