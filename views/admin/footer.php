@@ -153,6 +153,58 @@ if (isset($this->js)) {
             }
             e.handled = true;
         });
+        $(document).on('click', '.btnMostrarImg', function (e) {
+            if (e.handled !== true) // This will prevent event triggering more then once
+            {
+                var id = $(this).attr('data-id');
+                var metodo = $(this).attr('data-metodo');
+                $.ajax({
+                    url: '<?= URL; ?>/admin/' + metodo,
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#mostrarImg' + data.id).html(data.content);
+                });
+            }
+            e.handled = true;
+        });
+        $(document).on('click', '.btnEditarImg', function (e) {
+            if (e.handled !== true) // This will prevent event triggering more then once
+            {
+                var id = $(this).attr('data-id');
+                var metodo = $(this).attr('data-metodo');
+                $.ajax({
+                    url: '<?= URL; ?>/admin/' + metodo,
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'json'
+                }).done(function (data) {
+                    $(".genericModal .modal-header").removeClass("modal-header").addClass("modal-header bg-primary");
+                    $(".genericModal .modal-title").html(data.titulo);
+                    $(".genericModal .modal-body").html(data.content);
+                    $(".genericModal").modal("toggle");
+                });
+            }
+            e.handled = true;
+        });
+        $(document).on('click', '.btnEliminarImg', function (e) {
+            if (e.handled !== true) // This will prevent event triggering more then once
+            {
+                var id = $(this).attr('data-id');
+                var metodo = $(this).attr('data-metodo');
+                $.ajax({
+                    url: '<?= URL; ?>/admin/' + metodo,
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#imagenGaleria' + data.id).remove();
+                    toastr.success(data.content);
+                });
+            }
+            e.handled = true;
+        });
 
     });
 </script>

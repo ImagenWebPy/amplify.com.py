@@ -35,6 +35,22 @@ class Admin extends Controller {
             unset($_SESSION['message']);
     }
 
+    public function pantallas_led() {
+        $this->view->helper = $this->helper;
+        $this->view->title = 'Pantallas Led';
+
+        $this->view->datosPantalla = $this->model->getDatosTabla('pantallas_led', 1);
+        $this->view->imagenesPantallasLed = $this->model->imagenesPantallasLed();
+        $this->view->public_css = array("css/plugins/html5fileupload/html5fileupload.css", "css/plugins/toastr/toastr.min.css", "css/plugins/iCheck/custom.css", "css/plugins/summernote/summernote.css");
+        $this->view->publicHeader_js = array("js/plugins/html5fileupload/html5fileupload.min.js");
+        $this->view->public_js = array("js/plugins/toastr/toastr.min.js", "js/plugins/summernote/summernote.min.js", "js/plugins/iCheck/icheck.min.js");
+        $this->view->render('admin/header');
+        $this->view->render('admin/pantallas_led/index');
+        $this->view->render('admin/footer');
+        if (!empty($_SESSION['message']))
+            unset($_SESSION['message']);
+    }
+
     public function cambiarEstado() {
         header('Content-type: application/json; charset=utf-8');
         $datos = array(
@@ -57,6 +73,15 @@ class Admin extends Controller {
         echo $datos;
     }
 
+    public function editar_img_pantallas_led() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => $this->helper->cleanInput($_POST['id'])
+        );
+        $datos = $this->model->editar_img_pantallas_led($data);
+        echo $datos;
+    }
+
     public function listadoDTSlider() {
         header('Content-type: application/json; charset=utf-8');
         $data = $this->model->listadoDTSlider();
@@ -75,6 +100,27 @@ class Admin extends Controller {
             'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0,
         );
         $data = $this->model->frmEditarSlider($datos);
+        echo json_encode($data);
+    }
+
+    public function frmEditarPantallasLed() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'header_titulo' => (!empty($_POST['header_titulo'])) ? $this->helper->cleanInput($_POST['header_titulo']) : NULL,
+            'contenido' => (!empty($_POST['contenido'])) ? $_POST['contenido'] : NULL
+        );
+        $data = $this->model->frmEditarPantallasLed($datos);
+        echo json_encode($data);
+    }
+
+    public function frmEditarPantallasLedMetaTags() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'title' => (!empty($_POST['title'])) ? $this->helper->cleanInput($_POST['title']) : NULL,
+            'description' => (!empty($_POST['description'])) ? $this->helper->cleanInput($_POST['description']) : NULL,
+            'keywords' => (!empty($_POST['keywords'])) ? $this->helper->cleanInput($_POST['keywords']) : NULL,
+        );
+        $data = $this->model->frmEditarPantallasLedMetaTags($datos);
         echo json_encode($data);
     }
 
@@ -169,6 +215,17 @@ class Admin extends Controller {
         header('Location:' . URL . 'admin/inicio/');
     }
 
+    public function frmEditarImagenesPantallasLed() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+            'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+            'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0
+        );
+        $datos = $this->model->frmEditarImagenesPantallasLed($data);
+        echo json_encode($datos);
+    }
+
     public function frmEditarIndexSeccion1() {
         header('Content-type: application/json; charset=utf-8');
         $data = array(
@@ -253,7 +310,7 @@ class Admin extends Controller {
         $datos = $this->model->frmEditarIndexSeccion4($data);
         echo json_encode($datos);
     }
-    
+
     public function frmEditarIndexSeccion5() {
         header('Content-type: application/json; charset=utf-8');
         $data = array(
@@ -337,6 +394,220 @@ class Admin extends Controller {
                 'imagen' => $filename
             );
             $response = $this->model->uploadImgSeccion4($data);
+            echo json_encode($response);
+        }
+    }
+
+    public function uploadImgPantallaLed() {
+        if (!empty($_POST)) {
+            $idPost = $_POST['data']['id'];
+            $this->model->unlinkImagenPantallasLed($idPost);
+            $error = false;
+            $error = false;
+            $absolutedir = dirname(__FILE__);
+            $dir = 'public/images/pantallas_led/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            $filename = $this->helper->cleanUrl($idPost . '_' . $name);
+            $filename = $filename . '.' . $extension;
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 800;
+            $alto = 650;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+
+            #############
+            header('Content-type: application/json; charset=utf-8');
+            $data = array(
+                'id' => $idPost,
+                'imagen' => $filename
+            );
+            $response = $this->model->uploadImgPantallaLed($data);
+            echo json_encode($response);
+        }
+    }
+
+    public function uploadImgHeaderPantallasLed() {
+        if (!empty($_POST)) {
+            $error = false;
+            $error = false;
+            $absolutedir = dirname(__FILE__);
+            $dir = 'public/images/hedaer/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            $filename = $this->helper->cleanUrl($name);
+            $filename = $filename . '.' . $extension;
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 1920;
+            $alto = 1100;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+
+            #############
+            header('Content-type: application/json; charset=utf-8');
+            $data = array(
+                'imagen' => $filename
+            );
+            $response = $this->model->uploadImgHeaderPantallasLed($data);
+            echo json_encode($response);
+        }
+    }
+
+    public function estado_img_pantallas_led() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->estado_img_pantallas_led($data);
+        echo json_encode($datos);
+    }
+
+    public function eliminar_img_pantallas_led() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->eliminar_img_pantallas_led($data);
+        echo json_encode($datos);
+    }
+
+    public function uploadProductoImagen() {
+        if (!empty($_POST)) {
+            $idInsertDB = $this->model->insertImgPantallasLed();
+            $error = false;
+            $dir = 'public/images/pantallas_led/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            #insertamos la imagen para obtene
+
+            $filename = $this->helper->cleanUrl($idInsertDB . '_' . $name);
+            $filename = $filename . '.' . $extension;
+            //$filename				= $file.'.'.substr(sha1(time()),0,6).'.'.$extension;
+
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 800;
+            $alto = 650;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+            $dataImagen = array(
+                'id' => $idInsertDB,
+                'archivo' => $filename
+            );
+            $uploadImagen = $this->model->uploadProductoImagen($dataImagen);
+            ###################################################
+            $dirThumb = 'public/images/productos/thumb/';
+            $serverdirThumb = $dirThumb;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            #insertamos la imagen para obtene
+
+            $filenameThumb = $this->helper->cleanUrl($idInsertDB . '_thumb-' . $name);
+            $filenameThumb = $filenameThumb . '.' . $extension;
+            //$filename				= $file.'.'.substr(sha1(time()),0,6).'.'.$extension;
+
+            $handle = fopen($serverdirThumb . $filenameThumb, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdirThumb . $filenameThumb;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filenameThumb;
+            $ancho = 270;
+            $alto = 203;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdirThumb);
+            $dataImagenThumb = array(
+                'id' => $idInsertDB,
+                'archivo' => $filenameThumb
+            );
+            $response = $this->model->uploadProductoImagenMiniatura($dataImagenThumb);
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($response);
+            //echo json_encode(array('result'=>true));
+        }
+    }
+
+    public function frmAgregarImgPantallasLed() {
+        header('Content-type: application/json; charset=utf-8');
+        if (!empty($_POST)) {
+            $data = array(
+                'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+                'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+                'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0,
+            );
+            $idPost = $this->model->frmAgregarImgPantallasLed($data);
+            #IMAGENES
+            if (!empty($_FILES['file_archivo']['name'])) {
+                $error = false;
+                $dir = 'public/images/pantallas_led/';
+                $serverdir = $dir;
+                #IMAGENES
+                $newname = $idPost . '_' . $_FILES['file_archivo']['name'];
+                $fname = $this->helper->cleanUrl($newname);
+                $contents = file_get_contents($_FILES['file_archivo']['tmp_name']);
+
+                $handle = fopen($serverdir . $fname, 'w');
+                fwrite($handle, $contents);
+                fclose($handle);
+                #############
+                #SE REDIMENSIONA LA IMAGEN
+                #############
+                # ruta de la imagen a redimensionar 
+                $imagen = $serverdir . $fname;
+                # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+                $imagen_final = $fname;
+                $ancho = 800;
+                $alto = 650;
+                $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+                #############
+                $imagenes = array(
+                    'id' => $idPost,
+                    'imagenes' => $fname
+                );
+                $this->model->frmAddImgPantallasLed($imagenes);
+            }
+            $response = $this->model->armaPantallasLed($idPost);
             echo json_encode($response);
         }
     }

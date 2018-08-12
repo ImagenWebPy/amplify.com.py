@@ -5,7 +5,6 @@
             <li>
                 <a href="<?= URL ?>/admin">Inicio</a>
             </li>
-            <li><a>Contenido</a></li>
             <li class="active">
                 <strong>Página Inicio</strong>
             </li>
@@ -301,12 +300,12 @@
                                     <script>
                                         $(".html5fileupload.fileImagenSeccion3").html5fileupload({
                                             onAfterStartSuccess: function (response) {
-                                                $("#imgImagenSeccion3").html(response.content);
+                                                $("#imgImagenSeccion4").html(response.content);
                                             }
                                         });
                                     </script>
                                     <div class="row">
-                                        <div class="col-md-12" id="imgImagenSeccion3">
+                                        <div class="col-md-12" id="imgImagenSeccion4">
                                             <img class="img-responsive" src="<?= URL ?>public/images/<?= $this->datosSeccion4['imagen']; ?>">';
                                         </div>
                                     </div>

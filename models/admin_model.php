@@ -215,6 +215,88 @@ class Admin_Model extends Model {
         return json_encode($data);
     }
 
+    public function editar_img_pantallas_led($datos) {
+        $id = $datos['id'];
+        $sql = $this->db->select("SELECT * FROM `pantallas_led_img` where id = $id");
+        $checked = ($sql[0]['estado'] == 1) ? 'checked' : '';
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos de la imagen</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmEditarImagenesPantallasLed" method="POST">
+                            <input type="hidden" name="id" value="' . $id . '">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Orden</label>
+                                        <input type="text" name="orden" class="form-control" placeholder="Orden" value="' . utf8_encode($sql[0]['orden']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="estado" value="1" ' . $checked . '> <i></i> Mostrar </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Descripción</label>
+                                        <input type="text" name="descripcion" class="form-control" value="' . utf8_encode($sql[0]['descripcion']) . '">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg">Editar Contenido</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="col-md-12">
+                            <h3>Imagen</h3>
+                            <div class="alert alert-info alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                Detalles de la imagen a subir:<br>
+                                -Formato: JPG,PNG<br>
+                                -Dimensión: Imagen Normal: 800 x 650<br>
+                                -Tamaño: Hasta 2MB<br>
+                                <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
+                            </div>
+                            <div class="html5fileupload fileSlider" data-max-filesize="2048000" data-url="' . URL . '/admin/uploadImgPantallaLed" data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
+                                <input type="file" name="file_archivo" />
+                            </div>
+                            <script>
+                                $(".html5fileupload.fileSlider").html5fileupload({
+                                    data: {id: ' . $id . '},
+                                    onAfterStartSuccess: function (response) {
+                                        $("#imgsPantallasLed" + response.id).html(response.imagen);
+                                        $("#imagenGaleria" + response.id).html(response.content);
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-12" id="imgsPantallasLed' . $id . '">';
+        if (!empty($sql[0]['imagen'])) {
+            $modal .= '     <img class="img-responsive" src="' . URL . 'public/images/pantallas_led/' . $sql[0]['imagen'] . '">';
+        }
+        $modal .= '     </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green",
+                            radioClass: "iradio_square-green",
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Editar Slider',
+            'content' => $modal
+        );
+        return json_encode($data);
+    }
+
     public function frmEditarSlider($datos) {
         $id = $datos['id'];
         $estado = 1;
@@ -258,6 +340,16 @@ class Admin_Model extends Model {
     public function unlinkImagenSlider($id) {
         $sql = $this->db->select("select imagen from slider where id = $id");
         $dir = 'public/images/slider/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['imagen'])) {
+                unlink($dir . $sql[0]['imagen']);
+            }
+        }
+    }
+
+    public function unlinkImagenPantallasLed($id) {
+        $sql = $this->db->select("select imagen from pantallas_led_img where id = $id");
+        $dir = 'public/images/pantallas_led/';
         if (!empty($sql)) {
             if (file_exists($dir . $sql[0]['imagen'])) {
                 unlink($dir . $sql[0]['imagen']);
@@ -360,6 +452,16 @@ class Admin_Model extends Model {
         return $id;
     }
 
+    public function frmAgregarImgPantallasLed($datos) {
+        $this->db->insert('pantallas_led_img', array(
+            'orden' => utf8_decode($datos['orden']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'estado' => $datos['estado']
+        ));
+        $id = $this->db->lastInsertId();
+        return $id;
+    }
+
     public function frmAddSliderImg($imagenes) {
         $id = $imagenes['id'];
         $update = array(
@@ -368,9 +470,36 @@ class Admin_Model extends Model {
         $this->db->update('slider', $update, "id = $id");
     }
 
+    public function frmAddImgPantallasLed($imagenes) {
+        $id = $imagenes['id'];
+        $update = array(
+            'imagen' => $imagenes['imagenes']
+        );
+        $this->db->update('pantallas_led_img', $update, "id = $id");
+    }
+
     public function datosSeccion($seccion) {
         $sql = $this->db->select("select * from index_seccion_" . $seccion . " where id = 1");
         return $sql[0];
+    }
+
+    public function frmEditarImagenesPantallasLed($datos) {
+        $id = 1;
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'orden' => utf8_decode($datos['orden']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'estado' => $estado
+        );
+        $this->db->update('pantallas_led_img', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de la imagen'
+        );
+        return $data;
     }
 
     public function frmEditarIndexSeccion1($datos) {
@@ -652,6 +781,33 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function frmEditarPantallasLed($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo']),
+            'contenido' => utf8_decode($datos['contenido'])
+        );
+        $this->db->update('pantallas_led', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
+
+    public function frmEditarPantallasLedMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('pantallas_led', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+
     public function uploadImgSeccion3($data) {
         $id = 1;
         $update = array(
@@ -678,6 +834,119 @@ class Admin_Model extends Model {
             'content' => $contenido
         );
         return $datos;
+    }
+
+    public function uploadImgPantallaLed($data) {
+        $id = $data['id'];
+        $update = array(
+            'imagen' => $data['imagen']
+        );
+        $this->db->update('pantallas_led_img', $update, "id = $id");
+        $sql = $this->db->select("select * from pantallas_led_img where id = $id");
+        if ($sql[0]['estado'] == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-danger">Oculta</span></a>';
+        }
+        $contenido = '
+                    <img class="img-responsive" src="' . URL . 'public/images/pantallas_led/' . $data['imagen'] . '" alt="Photo">
+                    <p>' . $mostrar . ' | <a class="pointer btnEditarImg" data-id="' . $id . '" data-metodo="editar_img_pantallas_led"><span class="label label-warning">Editar</span></a> | <a class="pointer btnEliminarImg" data-id="' . $id . '" data-metodo="eliminar_img_pantallas_led"><span class="label label-danger">Eliminar</span></a></p>
+                    ';
+        $imagen = '<img class="img-responsive" src="' . URL . 'public/images/pantallas_led/' . $data['imagen'] . '" alt="Photo">';
+        $row = '';
+        $datos = array(
+            "result" => TRUE,
+            'id' => $id,
+            'imagen' => $imagen,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgHeaderPantallasLed($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('pantallas_led', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function imagenesPantallasLed() {
+        $sql = $this->db->select("SELECT * FROM pantallas_led_img ORDER BY orden ASC");
+        return $sql;
+    }
+
+    public function estado_img_pantallas_led($datos) {
+        $id = $datos['id'];
+        #estado actual
+        $sql = $this->db->select("select estado from pantallas_led_img where id = $id");
+        $newEstado = ($sql[0]['estado'] == 1) ? 0 : 1;
+        $update = array(
+            'estado' => $newEstado
+        );
+        $this->db->update('pantallas_led_img', $update, "id = $id");
+        if ($newEstado == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-danger">Oculta</span></a>';
+        }
+        $data = array(
+            'id' => $id,
+            'content' => $mostrar
+        );
+        return $data;
+    }
+
+    public function insertProductoImagenes($datos) {
+        $this->db->insert('pantallas_led_img', array(
+            'estado' => 1,
+        ));
+        $id = $this->db->lastInsertId();
+        return $id;
+    }
+
+    public function getDatosTabla($tabla, $id) {
+        $sql = $this->db->select("select * from $tabla where id = $id");
+        return $sql[0];
+    }
+
+    public function armaPantallasLed($datos) {
+        $id = $datos;
+        $sql = $this->db->select("SELECT * FROM pantallas_led_img where id = $id;");
+        if ($sql[0]['estado'] == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-danger">Oculta</span></a>';
+        }
+        $content = '<div class="col-sm-3" id="imagenGaleria' . $id . '">
+                    <img style="width: 237px; height: 192px;" class="img-responsive" src="http://localhost/amplify.com.py/public/images/pantallas_led/3_800x650.png" alt="Photo">
+                    <p>    ' . $mostrar . ' | <a class="pointer btnEditarImg" data-id="' . $id . '" data-metodo="editar_img_pantallas_led"><span class="label label-warning">Editar</span></a> | <a class="pointer btnEliminarImg" data-id="' . $id . '" data-metodo="eliminar_img_pantallas_led"><span class="label label-danger">Eliminar</span></a></p>
+                </div>';
+        $data = array(
+            'content' => $content,
+            'messahe' => 'Se ha agregado el contenido.'
+        );
+        return $data;
+    }
+
+    public function eliminar_img_pantallas_led($datos) {
+        $id = $datos['id'];
+        $this->unlinkImagenPantallasLed($id);
+        $sth = $this->db->prepare("delete from pantallas_led_img where id = :id");
+        $sth->execute(array(
+            ':id' => $id
+        ));
+        $data = array(
+            'id' => $id,
+            'content' => 'Se ha eliminado correctamente la imagen'
+        );
+        return $data;
     }
 
 }
