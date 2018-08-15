@@ -296,6 +296,88 @@ class Admin_Model extends Model {
         );
         return json_encode($data);
     }
+    
+    public function editar_img_iconicos($datos) {
+        $id = $datos['id'];
+        $sql = $this->db->select("SELECT * FROM `iconicos_img` where id = $id");
+        $checked = ($sql[0]['estado'] == 1) ? 'checked' : '';
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos de la imagen</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmEditarImagenesIconicos" method="POST">
+                            <input type="hidden" name="id" value="' . $id . '">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Orden</label>
+                                        <input type="text" name="orden" class="form-control" placeholder="Orden" value="' . utf8_encode($sql[0]['orden']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="estado" value="1" ' . $checked . '> <i></i> Mostrar </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Descripción</label>
+                                        <input type="text" name="descripcion" class="form-control" value="' . utf8_encode($sql[0]['descripcion']) . '">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg">Editar Contenido</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="col-md-12">
+                            <h3>Imagen</h3>
+                            <div class="alert alert-info alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                Detalles de la imagen a subir:<br>
+                                -Formato: JPG,PNG<br>
+                                -Dimensión: Imagen Normal: 800 x 650<br>
+                                -Tamaño: Hasta 2MB<br>
+                                <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
+                            </div>
+                            <div class="html5fileupload fileIconicosAgregar" data-max-filesize="2048000" data-url="' . URL . '/admin/uploadImgIconicos" data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
+                                <input type="file" name="file_archivo" />
+                            </div>
+                            <script>
+                                $(".html5fileupload.fileIconicosAgregar").html5fileupload({
+                                    data: {id: ' . $id . '},
+                                    onAfterStartSuccess: function (response) {
+                                        $("#imgsIconicosAgregar" + response.id).html(response.imagen);
+                                        $("#imagenGaleria" + response.id).html(response.content);
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-12" id="imgsIconicosAgregar' . $id . '">';
+        if (!empty($sql[0]['imagen'])) {
+            $modal .= '     <img class="img-responsive" src="' . URL . 'public/images/iconicos/' . $sql[0]['imagen'] . '">';
+        }
+        $modal .= '     </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green",
+                            radioClass: "iradio_square-green",
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Editar Icónicos',
+            'content' => $modal
+        );
+        return json_encode($data);
+    }
 
     public function editar_img_carteles_tradicionales($datos) {
         $id = $datos['id'];
@@ -438,6 +520,16 @@ class Admin_Model extends Model {
             }
         }
     }
+    
+    public function unlinkImagenIconicos($id) {
+        $sql = $this->db->select("select imagen from iconicos_img where id = $id");
+        $dir = 'public/images/iconicos/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['imagen'])) {
+                unlink($dir . $sql[0]['imagen']);
+            }
+        }
+    }
 
     public function unlinkImagenCartelesTradicionales($id) {
         $sql = $this->db->select("select imagen from carteles_tradicionales_img where id = $id");
@@ -553,6 +645,16 @@ class Admin_Model extends Model {
         $id = $this->db->lastInsertId();
         return $id;
     }
+    
+    public function frmAgregarImgIconicos($datos) {
+        $this->db->insert('iconicos_img', array(
+            'orden' => utf8_decode($datos['orden']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'estado' => $datos['estado']
+        ));
+        $id = $this->db->lastInsertId();
+        return $id;
+    }
 
     public function frmAgregarImgCartelesTradicionales($datos) {
         $this->db->insert('carteles_tradicionales_img', array(
@@ -580,6 +682,14 @@ class Admin_Model extends Model {
         );
         $this->db->update('pantallas_led_img', $update, "id = $id");
     }
+    
+    public function frmAddImgIconicos($imagenes) {
+        $id = $imagenes['id'];
+        $update = array(
+            'imagen' => $imagenes['imagenes']
+        );
+        $this->db->update('iconicos_img', $update, "id = $id");
+    }
 
     public function frmAddImgCartelesTradicionales($imagenes) {
         $id = $imagenes['id'];
@@ -606,6 +716,25 @@ class Admin_Model extends Model {
             'estado' => $estado
         );
         $this->db->update('pantallas_led_img', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de la imagen'
+        );
+        return $data;
+    }
+    
+    public function frmEditarImagenesIconicos($datos) {
+        $id = $datos['id'];
+        $estado = 1;
+        if (empty($datos['estado'])) {
+            $estado = 0;
+        }
+        $update = array(
+            'orden' => utf8_decode($datos['orden']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'estado' => $estado
+        );
+        $this->db->update('iconicos_img', $update, "id = $id");
         $data = array(
             'type' => 'success',
             'content' => 'Se ha actualizado el contenido de la imagen'
@@ -923,6 +1052,19 @@ class Admin_Model extends Model {
         );
         return $data;
     }
+    
+    public function frmEditarIconicos($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo']),
+            'contenido' => utf8_decode($datos['contenido'])
+        );
+        $this->db->update('iconicos', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
 
     public function frmEditarCartelesTradicionales($datos) {
         $id = $datos['id'];
@@ -946,6 +1088,20 @@ class Admin_Model extends Model {
             'keywords' => utf8_decode($datos['keywords'])
         );
         $this->db->update('pantallas_led', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+    
+    public function frmEditarIconicosMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('iconicos', $update, "id = 1");
         $data = array(
             'type' => 'success',
             'content' => 'Se ha actualizado el contenido de meta tags.'
@@ -1023,6 +1179,33 @@ class Admin_Model extends Model {
         return $datos;
     }
     
+    public function uploadImgIconicos($data) {
+        $id = $data['id'];
+        $update = array(
+            'imagen' => $data['imagen']
+        );
+        $this->db->update('iconicos_img', $update, "id = $id");
+        $sql = $this->db->select("select * from iconicos_img where id = $id");
+        if ($sql[0]['estado'] == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-danger">Oculta</span></a>';
+        }
+        $contenido = '
+                    <img class="img-responsive" src="' . URL . 'public/images/iconicos/' . $data['imagen'] . '" alt="Photo">
+                    <p>' . $mostrar . ' | <a class="pointer btnEditarImg" data-id="' . $id . '" data-metodo="editar_img_iconicos"><span class="label label-warning">Editar</span></a> | <a class="pointer btnEliminarImg" data-id="' . $id . '" data-metodo="eliminar_img_iconicos"><span class="label label-danger">Eliminar</span></a></p>
+                    ';
+        $imagen = '<img class="img-responsive" src="' . URL . 'public/images/iconicos/' . $data['imagen'] . '" alt="Photo">';
+        $row = '';
+        $datos = array(
+            "result" => TRUE,
+            'id' => $id,
+            'imagen' => $imagen,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+    
     public function uploadImgCartelesTradicionales($data) {
         $id = $data['id'];
         $update = array(
@@ -1082,6 +1265,11 @@ class Admin_Model extends Model {
         $sql = $this->db->select("SELECT * FROM pantallas_led_img ORDER BY orden ASC");
         return $sql;
     }
+    
+    public function imagenesIconicos() {
+        $sql = $this->db->select("SELECT * FROM iconicos_img ORDER BY orden ASC");
+        return $sql;
+    }
 
     public function imagenesCartelesTradicionales($id_carteles_tradicionales) {
         $sql = $this->db->select("SELECT * FROM carteles_tradicionales_img where id_carteles_tradicionales = $id_carteles_tradicionales ORDER BY orden ASC");
@@ -1101,6 +1289,27 @@ class Admin_Model extends Model {
             $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-success">Visible</span></a>';
         } else {
             $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_pantallas_led"><span class="label label-danger">Oculta</span></a>';
+        }
+        $data = array(
+            'id' => $id,
+            'content' => $mostrar
+        );
+        return $data;
+    }
+    
+    public function estado_img_iconicos($datos) {
+        $id = $datos['id'];
+        #estado actual
+        $sql = $this->db->select("select estado from iconicos_img where id = $id");
+        $newEstado = ($sql[0]['estado'] == 1) ? 0 : 1;
+        $update = array(
+            'estado' => $newEstado
+        );
+        $this->db->update('iconicos_img', $update, "id = $id");
+        if ($newEstado == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-danger">Oculta</span></a>';
         }
         $data = array(
             'id' => $id,
@@ -1161,6 +1370,25 @@ class Admin_Model extends Model {
         );
         return $data;
     }
+    
+    public function armaIconicos($datos) {
+        $id = $datos;
+        $sql = $this->db->select("SELECT * FROM iconicos_img where id = $id;");
+        if ($sql[0]['estado'] == 1) {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-success">Visible</span></a>';
+        } else {
+            $mostrar = '    <a class="pointer btnMostrarImg" id="mostrarImg' . $id . '" data-id="' . $id . '" data-metodo="estado_img_iconicos"><span class="label label-danger">Oculta</span></a>';
+        }
+        $content = '<div class="col-sm-3" id="imagenGaleria' . $id . '">
+                    <img style="width: 237px; height: 192px;" class="img-responsive" src="' . URL . 'public/images/iconicos/' . $sql[0]['imagen'] . '" alt="Photo">
+                    <p>    ' . $mostrar . ' | <a class="pointer btnEditarImg" data-id="' . $id . '" data-metodo="editar_img_iconicos"><span class="label label-warning">Editar</span></a> | <a class="pointer btnEliminarImg" data-id="' . $id . '" data-metodo="eliminar_img_iconicos"><span class="label label-danger">Eliminar</span></a></p>
+                </div>';
+        $data = array(
+            'content' => $content,
+            'message' => 'Se ha agregado el contenido.'
+        );
+        return $data;
+    }
 
     public function armaCartelesTradicionales($datos) {
         $id = $datos;
@@ -1185,6 +1413,20 @@ class Admin_Model extends Model {
         $id = $datos['id'];
         $this->unlinkImagenPantallasLed($id);
         $sth = $this->db->prepare("delete from pantallas_led_img where id = :id");
+        $sth->execute(array(
+            ':id' => $id
+        ));
+        $data = array(
+            'id' => $id,
+            'content' => 'Se ha eliminado correctamente la imagen'
+        );
+        return $data;
+    }
+    
+    public function eliminar_img_iconicos($datos) {
+        $id = $datos['id'];
+        $this->unlinkImagenIconicos($id);
+        $sth = $this->db->prepare("delete from iconicos_img where id = :id");
         $sth->execute(array(
             ':id' => $id
         ));

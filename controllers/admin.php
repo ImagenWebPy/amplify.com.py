@@ -52,6 +52,23 @@ class Admin extends Controller {
             unset($_SESSION['message']);
     }
 
+    public function iconicos() {
+        $this->view->helper = $this->helper;
+        $this->view->title = 'Iconicos';
+
+        $this->view->datosPantalla = $this->model->getDatosTabla('iconicos', 1);
+        $this->view->imagenesIconicos = $this->model->imagenesIconicos();
+
+        $this->view->public_css = array("css/plugins/html5fileupload/html5fileupload.css", "css/plugins/toastr/toastr.min.css", "css/plugins/iCheck/custom.css", "css/plugins/summernote/summernote.css");
+        $this->view->publicHeader_js = array("js/plugins/html5fileupload/html5fileupload.min.js");
+        $this->view->public_js = array("js/plugins/toastr/toastr.min.js", "js/plugins/summernote/summernote.min.js", "js/plugins/iCheck/icheck.min.js");
+        $this->view->render('admin/header');
+        $this->view->render('admin/iconicos/index');
+        $this->view->render('admin/footer');
+        if (!empty($_SESSION['message']))
+            unset($_SESSION['message']);
+    }
+
     public function asuncion() {
         $this->view->helper = $this->helper;
         $this->view->title = 'Asunción';
@@ -85,7 +102,7 @@ class Admin extends Controller {
         if (!empty($_SESSION['message']))
             unset($_SESSION['message']);
     }
-    
+
     public function ruteros() {
         $this->view->helper = $this->helper;
         $this->view->title = 'Ruteros';
@@ -102,7 +119,7 @@ class Admin extends Controller {
         if (!empty($_SESSION['message']))
             unset($_SESSION['message']);
     }
-    
+
     public function urbanos() {
         $this->view->helper = $this->helper;
         $this->view->title = 'Urbanos';
@@ -150,6 +167,15 @@ class Admin extends Controller {
         $datos = $this->model->editar_img_pantallas_led($data);
         echo $datos;
     }
+    
+    public function editar_img_iconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => $this->helper->cleanInput($_POST['id'])
+        );
+        $datos = $this->model->editar_img_iconicos($data);
+        echo $datos;
+    }
 
     public function editar_img_carteles_tradicionales() {
         header('Content-type: application/json; charset=utf-8');
@@ -191,6 +217,16 @@ class Admin extends Controller {
         echo json_encode($data);
     }
 
+    public function frmEditarIconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'header_titulo' => (!empty($_POST['header_titulo'])) ? $this->helper->cleanInput($_POST['header_titulo']) : NULL,
+            'contenido' => (!empty($_POST['contenido'])) ? $_POST['contenido'] : NULL
+        );
+        $data = $this->model->frmEditarIconicos($datos);
+        echo json_encode($data);
+    }
+
     public function frmEditarCartelesTradicionales() {
         header('Content-type: application/json; charset=utf-8');
         $datos = array(
@@ -211,6 +247,17 @@ class Admin extends Controller {
             'keywords' => (!empty($_POST['keywords'])) ? $this->helper->cleanInput($_POST['keywords']) : NULL,
         );
         $data = $this->model->frmEditarPantallasLedMetaTags($datos);
+        echo json_encode($data);
+    }
+
+    public function frmEditarIconicosMetaTags() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'title' => (!empty($_POST['title'])) ? $this->helper->cleanInput($_POST['title']) : NULL,
+            'description' => (!empty($_POST['description'])) ? $this->helper->cleanInput($_POST['description']) : NULL,
+            'keywords' => (!empty($_POST['keywords'])) ? $this->helper->cleanInput($_POST['keywords']) : NULL,
+        );
+        $data = $this->model->frmEditarIconicosMetaTags($datos);
         echo json_encode($data);
     }
 
@@ -326,6 +373,18 @@ class Admin extends Controller {
             'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0
         );
         $datos = $this->model->frmEditarImagenesPantallasLed($data);
+        echo json_encode($datos);
+    }
+
+    public function frmEditarImagenesIconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+            'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+            'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+            'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0
+        );
+        $datos = $this->model->frmEditarImagenesIconicos($data);
         echo json_encode($datos);
     }
 
@@ -554,6 +613,47 @@ class Admin extends Controller {
         }
     }
     
+    public function uploadImgIconicos() {
+        if (!empty($_POST)) {
+            $idPost = $_POST['data']['id'];
+            $this->model->unlinkImagenIconicos($idPost);
+            $error = false;
+            $error = false;
+            $absolutedir = dirname(__FILE__);
+            $dir = 'public/images/iconicos/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            $filename = $this->helper->cleanUrl($idPost . '_' . $name);
+            $filename = $filename . '.' . $extension;
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 800;
+            $alto = 650;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+
+            #############
+            header('Content-type: application/json; charset=utf-8');
+            $data = array(
+                'id' => $idPost,
+                'imagen' => $filename
+            );
+            $response = $this->model->uploadImgIconicos($data);
+            echo json_encode($response);
+        }
+    }
+
     public function uploadImgCartelesTradicionales() {
         if (!empty($_POST)) {
             $idPost = $_POST['data']['id'];
@@ -682,6 +782,15 @@ class Admin extends Controller {
         echo json_encode($datos);
     }
 
+    public function estado_img_iconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->estado_img_iconicos($data);
+        echo json_encode($datos);
+    }
+
     public function estado_img_carteles_tradicionales() {
         header('Content-type: application/json; charset=utf-8');
         $data = array(
@@ -697,6 +806,15 @@ class Admin extends Controller {
             'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
         );
         $datos = $this->model->eliminar_img_pantallas_led($data);
+        echo json_encode($datos);
+    }
+    
+    public function eliminar_img_iconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->eliminar_img_iconicos($data);
         echo json_encode($datos);
     }
 
@@ -821,7 +939,51 @@ class Admin extends Controller {
                 );
                 $this->model->frmAddImgPantallasLed($imagenes);
             }
-            $response = $this->model->armaPantallasLed($idPost);
+            $response = $this->model->armaIconicos($idPost);
+            echo json_encode($response);
+        }
+    }
+
+    public function frmAgregarImgIconicos() {
+        header('Content-type: application/json; charset=utf-8');
+        if (!empty($_POST)) {
+            $data = array(
+                'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+                'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+                'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0,
+            );
+            $idPost = $this->model->frmAgregarImgIconicos($data);
+            #IMAGENES
+            if (!empty($_FILES['file_archivo']['name'])) {
+                $error = false;
+                $dir = 'public/images/iconicos/';
+                $serverdir = $dir;
+                #IMAGENES
+                $newname = $idPost . '_' . $_FILES['file_archivo']['name'];
+                $fname = $this->helper->cleanUrl($newname);
+                $contents = file_get_contents($_FILES['file_archivo']['tmp_name']);
+
+                $handle = fopen($serverdir . $fname, 'w');
+                fwrite($handle, $contents);
+                fclose($handle);
+                #############
+                #SE REDIMENSIONA LA IMAGEN
+                #############
+                # ruta de la imagen a redimensionar 
+                $imagen = $serverdir . $fname;
+                # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+                $imagen_final = $fname;
+                $ancho = 800;
+                $alto = 650;
+                $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+                #############
+                $imagenes = array(
+                    'id' => $idPost,
+                    'imagenes' => $fname
+                );
+                $this->model->frmAddImgIconicos($imagenes);
+            }
+            $response = $this->model->armaIconicos($idPost);
             echo json_encode($response);
         }
     }
