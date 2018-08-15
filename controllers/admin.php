@@ -51,6 +51,23 @@ class Admin extends Controller {
         if (!empty($_SESSION['message']))
             unset($_SESSION['message']);
     }
+    
+    public function buses() {
+        $this->view->helper = $this->helper;
+        $this->view->title = 'Buses';
+
+        $this->view->datosPantalla = $this->model->getDatosTabla('buses', 1);
+        $this->view->imagenesBuses = $this->model->imagenesBuses();
+
+        $this->view->public_css = array("css/plugins/html5fileupload/html5fileupload.css", "css/plugins/toastr/toastr.min.css", "css/plugins/iCheck/custom.css", "css/plugins/summernote/summernote.css");
+        $this->view->publicHeader_js = array("js/plugins/html5fileupload/html5fileupload.min.js");
+        $this->view->public_js = array("js/plugins/toastr/toastr.min.js", "js/plugins/summernote/summernote.min.js", "js/plugins/iCheck/icheck.min.js");
+        $this->view->render('admin/header');
+        $this->view->render('admin/buses/index');
+        $this->view->render('admin/footer');
+        if (!empty($_SESSION['message']))
+            unset($_SESSION['message']);
+    }
 
     public function iconicos() {
         $this->view->helper = $this->helper;
@@ -168,6 +185,15 @@ class Admin extends Controller {
         echo $datos;
     }
     
+    public function editar_img_buses() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => $this->helper->cleanInput($_POST['id'])
+        );
+        $datos = $this->model->editar_img_buses($data);
+        echo $datos;
+    }
+    
     public function editar_img_iconicos() {
         header('Content-type: application/json; charset=utf-8');
         $data = array(
@@ -217,6 +243,16 @@ class Admin extends Controller {
         echo json_encode($data);
     }
 
+    public function frmEditarBuses() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'header_titulo' => (!empty($_POST['header_titulo'])) ? $this->helper->cleanInput($_POST['header_titulo']) : NULL,
+            'contenido' => (!empty($_POST['contenido'])) ? $_POST['contenido'] : NULL
+        );
+        $data = $this->model->frmEditarBuses($datos);
+        echo json_encode($data);
+    }
+
     public function frmEditarIconicos() {
         header('Content-type: application/json; charset=utf-8');
         $datos = array(
@@ -247,6 +283,17 @@ class Admin extends Controller {
             'keywords' => (!empty($_POST['keywords'])) ? $this->helper->cleanInput($_POST['keywords']) : NULL,
         );
         $data = $this->model->frmEditarPantallasLedMetaTags($datos);
+        echo json_encode($data);
+    }
+    
+    public function frmEditarBusesMetaTags() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'title' => (!empty($_POST['title'])) ? $this->helper->cleanInput($_POST['title']) : NULL,
+            'description' => (!empty($_POST['description'])) ? $this->helper->cleanInput($_POST['description']) : NULL,
+            'keywords' => (!empty($_POST['keywords'])) ? $this->helper->cleanInput($_POST['keywords']) : NULL,
+        );
+        $data = $this->model->frmEditarBusesMetaTags($datos);
         echo json_encode($data);
     }
 
@@ -373,6 +420,18 @@ class Admin extends Controller {
             'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0
         );
         $datos = $this->model->frmEditarImagenesPantallasLed($data);
+        echo json_encode($datos);
+    }
+    
+    public function frmEditarImagenesBuses() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+            'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+            'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+            'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0
+        );
+        $datos = $this->model->frmEditarImagenesBuses($data);
         echo json_encode($datos);
     }
 
@@ -613,6 +672,47 @@ class Admin extends Controller {
         }
     }
     
+    public function uploadImgBuses() {
+        if (!empty($_POST)) {
+            $idPost = $_POST['data']['id'];
+            $this->model->unlinkImagenBuses($idPost);
+            $error = false;
+            $error = false;
+            $absolutedir = dirname(__FILE__);
+            $dir = 'public/images/buses/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            $filename = $this->helper->cleanUrl($idPost . '_' . $name);
+            $filename = $filename . '.' . $extension;
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 800;
+            $alto = 650;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+
+            #############
+            header('Content-type: application/json; charset=utf-8');
+            $data = array(
+                'id' => $idPost,
+                'imagen' => $filename
+            );
+            $response = $this->model->uploadImgBuses($data);
+            echo json_encode($response);
+        }
+    }
+    
     public function uploadImgIconicos() {
         if (!empty($_POST)) {
             $idPost = $_POST['data']['id'];
@@ -781,6 +881,15 @@ class Admin extends Controller {
         $datos = $this->model->estado_img_pantallas_led($data);
         echo json_encode($datos);
     }
+    
+    public function estado_img_buses() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->estado_img_buses($data);
+        echo json_encode($datos);
+    }
 
     public function estado_img_iconicos() {
         header('Content-type: application/json; charset=utf-8');
@@ -806,6 +915,15 @@ class Admin extends Controller {
             'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
         );
         $datos = $this->model->eliminar_img_pantallas_led($data);
+        echo json_encode($datos);
+    }
+    
+    public function eliminar_img_buses() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'id' => (!empty($_POST['id'])) ? $this->helper->cleanInput($_POST['id']) : NULL,
+        );
+        $datos = $this->model->eliminar_img_buses($data);
         echo json_encode($datos);
     }
     
@@ -939,7 +1057,51 @@ class Admin extends Controller {
                 );
                 $this->model->frmAddImgPantallasLed($imagenes);
             }
-            $response = $this->model->armaIconicos($idPost);
+            $response = $this->model->armaPantallasLed($idPost);
+            echo json_encode($response);
+        }
+    }
+   
+    public function frmAgregarImgBuses() {
+        header('Content-type: application/json; charset=utf-8');
+        if (!empty($_POST)) {
+            $data = array(
+                'orden' => (!empty($_POST['orden'])) ? $this->helper->cleanInput($_POST['orden']) : NULL,
+                'descripcion' => (!empty($_POST['descripcion'])) ? $this->helper->cleanInput($_POST['descripcion']) : NULL,
+                'estado' => (!empty($_POST['estado'])) ? $this->helper->cleanInput($_POST['estado']) : 0,
+            );
+            $idPost = $this->model->frmAgregarImgBuses($data);
+            #IMAGENES
+            if (!empty($_FILES['file_archivo']['name'])) {
+                $error = false;
+                $dir = 'public/images/buses/';
+                $serverdir = $dir;
+                #IMAGENES
+                $newname = $idPost . '_' . $_FILES['file_archivo']['name'];
+                $fname = $this->helper->cleanUrl($newname);
+                $contents = file_get_contents($_FILES['file_archivo']['tmp_name']);
+
+                $handle = fopen($serverdir . $fname, 'w');
+                fwrite($handle, $contents);
+                fclose($handle);
+                #############
+                #SE REDIMENSIONA LA IMAGEN
+                #############
+                # ruta de la imagen a redimensionar 
+                $imagen = $serverdir . $fname;
+                # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+                $imagen_final = $fname;
+                $ancho = 800;
+                $alto = 650;
+                $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+                #############
+                $imagenes = array(
+                    'id' => $idPost,
+                    'imagenes' => $fname
+                );
+                $this->model->frmAddImgBuses($imagenes);
+            }
+            $response = $this->model->armaBuses($idPost);
             echo json_encode($response);
         }
     }
