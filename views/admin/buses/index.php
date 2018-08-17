@@ -283,7 +283,6 @@
                     processData: false,
                     success: function (data)
                     {
-                        console.log(data);
                         $("#imagenesBuses").append(data.content);
                         toastr.success(data.message);
                         $("input[name='orden']").val("");

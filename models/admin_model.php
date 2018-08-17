@@ -111,6 +111,25 @@ class Admin_Model extends Model {
                         . '<td>' . $estado . '</td>'
                         . '<td>' . $btnEditar . '</td>';
                 break;
+            case 'ubicaciones':
+                if ($sql[0]['estado'] == 1) {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+                } else {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+                }
+                $principal = '';
+                if ($sql[0]['principal'] == 1) {
+                    $principal = '<span class="label label-warning">Principal</span>';
+                }
+                $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTUbicaciones"><i class="fa fa-edit"></i> Editar </a>';
+                $data = '<td class="sorting_1">' . utf8_encode($sql[0]['id']) . '</td>'
+                        . '<td>' . strip_tags(utf8_encode($sql[0]['descripcion'])) . '</td>'
+                        . '<td>' . utf8_encode($sql[0]['latitud']) . '</td>'
+                        . '<td>' . utf8_encode($sql[0]['longitud']) . '</td>'
+                        . '<td>' . $principal . '</td>'
+                        . '<td>' . $estado . '</td>'
+                        . '<td>' . $btnEditar . '</td>';
+                break;
         }
         return $data;
     }
@@ -567,6 +586,25 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function frmEditarCoberturaUbicacion($datos) {
+        $id = $datos['id'];
+        $update = array(
+            'latitud' => utf8_decode($datos['latitud']),
+            'longitud' => utf8_decode($datos['longitud']),
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'principal' => $datos['principal'],
+            'estado' => $datos['estado']
+        );
+        $this->db->update('cobertura_ubicaciones', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'id' => $id,
+            'content' => $this->rowDataTable('ubicaciones', 'cobertura_ubicaciones', $id),
+            'message' => 'Se ha actualizado el contenido de la ubicación'
+        );
+        return $data;
+    }
+
     public function uploadImgSlider($datos) {
         $id = $datos['id'];
         $update = array(
@@ -602,7 +640,7 @@ class Admin_Model extends Model {
             }
         }
     }
-    
+
     public function unlinkImagenBuses($id) {
         $sql = $this->db->select("select imagen from buses_img where id = $id");
         $dir = 'public/images/buses/';
@@ -1108,6 +1146,42 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function frmAgregarCoberturaUbicacion($datos) {
+        $this->db->insert('cobertura_ubicaciones', array(
+            'descripcion' => utf8_decode($datos['descripcion']),
+            'latitud' => utf8_decode($datos['latitud']),
+            'longitud' => utf8_decode($datos['longitud']),
+            'principal' => $datos['principal'],
+            'estado' => $datos['estado']
+        ));
+        $id = $this->db->lastInsertId();
+        $sql = $this->db->select("select * from cobertura_ubicaciones where id = $id");
+        if ($sql[0]['estado'] == 1) {
+            $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+        } else {
+            $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+        }
+        $principal = '';
+        if ($sql[0]['principal'] == 1) {
+            $principal = '<span class="label label-warning">Principal</span>';
+        }
+        $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTUbicaciones"><i class="fa fa-edit"></i> Editar </a>';
+        $data = array(
+            'type' => 'success',
+            'content' => '<tr id="ubicaciones_' . $id . '" role="row" class="even">'
+            . '<td class="sorting_1">' . $id . '</td>'
+            . '<td>' . strip_tags(utf8_encode($sql[0]['descripcion'])) . '</td>'
+            . '<td>' . utf8_encode($sql[0]['latitud']) . '</td>'
+            . '<td>' . utf8_encode($sql[0]['longitud']) . '</td>'
+            . '<td>' . $principal . '</td>'
+            . '<td>' . $estado . '</td>'
+            . '<td>' . $btnEditar . '</td>'
+            . '</tr>',
+            'message' => 'Se ha agregado correctamente la ubcación'
+        );
+        return $data;
+    }
+
     public function frmEditarIndexSeccion3($datos) {
         $id = 1;
         $estado = 1;
@@ -1182,6 +1256,57 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function frmEditarMetricas($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo']),
+            'contenido' => utf8_decode($datos['contenido'])
+        );
+        $this->db->update('metricas', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
+
+    public function frmEditarEmpresa($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo']),
+            'contenido' => utf8_decode($datos['contenido'])
+        );
+        $this->db->update('empresa', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
+
+    public function frmEditarContacto($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo'])
+        );
+        $this->db->update('contacto', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
+
+    public function frmEditarCobertura($datos) {
+        $update = array(
+            'header_titulo' => utf8_decode($datos['header_titulo']),
+            'contenido' => utf8_decode($datos['contenido'])
+        );
+        $this->db->update('cobertura', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido.'
+        );
+        return $data;
+    }
+
     public function frmEditarBuses($datos) {
         $update = array(
             'header_titulo' => utf8_decode($datos['header_titulo']),
@@ -1230,6 +1355,62 @@ class Admin_Model extends Model {
             'keywords' => utf8_decode($datos['keywords'])
         );
         $this->db->update('pantallas_led', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+
+    public function frmEditarMetricasMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('metricas', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+
+    public function frmEditarEmpresaMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('empresa', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+
+    public function frmEditarContactoMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('contacto', $update, "id = 1");
+        $data = array(
+            'type' => 'success',
+            'content' => 'Se ha actualizado el contenido de meta tags.'
+        );
+        return $data;
+    }
+
+    public function frmEditarCoberturaMetaTags($datos) {
+        $update = array(
+            'title' => utf8_decode($datos['title']),
+            'description' => utf8_decode($datos['description']),
+            'keywords' => utf8_decode($datos['keywords'])
+        );
+        $this->db->update('cobertura', $update, "id = 1");
         $data = array(
             'type' => 'success',
             'content' => 'Se ha actualizado el contenido de meta tags.'
@@ -1334,7 +1515,7 @@ class Admin_Model extends Model {
         );
         return $datos;
     }
-    
+
     public function uploadImgBuses($data) {
         $id = $data['id'];
         $update = array(
@@ -1422,6 +1603,62 @@ class Admin_Model extends Model {
             'header_img' => $data['imagen']
         );
         $this->db->update('pantallas_led', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgHeaderMetricas($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('metricas', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgHeaderEmpresa($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('empresa', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgHeaderCobertura($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('cobertura', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
+
+    public function uploadImgHeaderContacto($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('contacto', $update, "id = $id");
         $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
         $datos = array(
             "result" => TRUE,
@@ -1650,7 +1887,7 @@ class Admin_Model extends Model {
         );
         return $data;
     }
-    
+
     public function eliminar_img_buses($datos) {
         $id = $datos['id'];
         $this->unlinkImagenBuses($id);
@@ -1689,6 +1926,152 @@ class Admin_Model extends Model {
         $data = array(
             'id' => $id,
             'content' => 'Se ha eliminado correctamente la imagen'
+        );
+        return $data;
+    }
+
+    public function coberturaUbicaciones() {
+        $sql = $this->db->select("SELECT * FROM `cobertura_ubicaciones`;");
+        return $sql;
+    }
+
+    public function listadoDTUbicaciones() {
+        $sql = $this->db->select("SELECT * FROM cobertura_ubicaciones ORDER BY id ASC;");
+        $datos = array();
+        foreach ($sql as $item) {
+            $id = $item['id'];
+            if ($item['estado'] == 1) {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+            } else {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="ubicaciones" data-rowid="ubicaciones_" data-tabla="cobertura_ubicaciones" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+            }
+            $principal = '';
+            if ($item['principal'] == 1) {
+                $principal = '<span class="label label-warning">Principal</span>';
+            }
+            $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTUbicaciones"><i class="fa fa-edit"></i> Editar </a>';
+            array_push($datos, array(
+                "DT_RowId" => "ubicaciones_$id",
+                'id' => $item['id'],
+                'descripcion' => strip_tags(utf8_encode($item['descripcion'])),
+                'latitud' => utf8_encode($item['latitud']),
+                'longitud' => utf8_encode($item['longitud']),
+                'principal' => $principal,
+                'estado' => $estado,
+                'editar' => $btnEditar
+            ));
+        }
+        $json = '{"data": ' . json_encode($datos) . '}';
+        return $json;
+    }
+
+    public function modalEditarDTUbicaciones($datos) {
+        $id = $datos['id'];
+        $sql = $this->db->select("SELECT * FROM `cobertura_ubicaciones` where id = $id");
+        $checkedEstado = ($sql[0]['estado'] == 1) ? 'checked' : '';
+        $checkedPrincipal = ($sql[0]['principal'] == 1) ? 'checked' : '';
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmEditarCoberturaUbicacion" method="POST">
+                            <input type="hidden" name="id" value="' . $id . '">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Descripcion</label>
+                                    <textarea name="descripcion" class="summernote">' . utf8_encode($sql[0]['descripcion']) . '</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Latitud</label>
+                                    <input type="text" name="latitud" class="form-control" value="' . utf8_encode($sql[0]['latitud']) . '">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Longitud</label>
+                                    <input type="text" name="longitud" class="form-control" value="' . utf8_encode($sql[0]['longitud']) . '">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="principal" value="1" ' . $checkedPrincipal . '> <i></i> Principal </label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="estado" value="1" ' . $checkedEstado . '> <i></i> Mostrar </label></div>
+                            </div>
+                            <hr>
+                            <div class="clearfix"></div>
+                            <div class="btn-submit">
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">Editar Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green"
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Editar Item de Ubicación',
+            'content' => $modal
+        );
+        return json_encode($data);
+    }
+
+    public function modalAgregarItemUbicacion() {
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" id="frmAgregarCoberturaUbicacion" method="POST">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Descripcion</label>
+                                    <textarea name="descripcion" class="summernote"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Latitud</label>
+                                    <input type="text" name="latitud" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Longitud</label>
+                                    <input type="text" name="longitud" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="principal" value="1"> <i></i> Principal </label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="i-checks"><label> <input type="checkbox" name="estado" value="1"> <i></i> Mostrar </label></div>
+                            </div>
+                            <hr>
+                            <div class="clearfix"></div>
+                            <div class="btn-submit">
+                                <button type="submit" class="btn btn-block btn-primary btn-lg">Agregar Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green"
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Agregar Item de Ubicación',
+            'content' => $modal
         );
         return $data;
     }
