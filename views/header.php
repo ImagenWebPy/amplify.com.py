@@ -85,7 +85,7 @@
                                         </li>
                                         <li><a href="<?= URL; ?>iconicos">Icónicos</a></li>
                                         <li><a href="<?= URL; ?>buses">Buses</a></li>
-                                        <li><a href="<?= URL; ?>cobertura">Cobetura</a></li>
+                                        <li><a href="<?= URL; ?>cobertura">Cobertura</a></li>
                                         <li><a href="<?= URL; ?>metricas">Métricas</a></li>
                                         <li><a href="<?= URL; ?>empresa">Empresa</a></li>
                                         <li><a href="<?= URL; ?>contacto">Contacto</a></li>

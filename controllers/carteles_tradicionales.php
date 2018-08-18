@@ -14,6 +14,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
+        $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Asuncion');
@@ -32,6 +33,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
+        $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Gran Asuncion');
@@ -50,6 +52,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
+        $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Ruteros');
@@ -68,6 +71,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
+        $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Urbanos');

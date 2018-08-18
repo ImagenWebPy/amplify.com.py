@@ -27,23 +27,13 @@
         <div class="container">
             <div class="row">
                 <!-- start about -->
-                <div class="col-md-6 col-sm-6 col-xs-12 widget sm-margin-30px-bottom xs-text-center">
+                <div class="col-md-12 col-sm-12 col-xs-12 widget sm-margin-30px-bottom xs-text-center">
                     <div class="widget-title alt-font text-small text-medium-gray text-uppercase margin-15px-bottom font-weight-600">La Empresa</div>
-                    <p class="text-small width-95 xs-width-100 no-margin">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the and typesetting industry. </p>
+                    <p class="text-small width-95 xs-width-100 no-margin"><?= utf8_encode($this->footerInfo); ?></p>
                 </div>
                 <!-- end about -->
                 <!-- start newsletter -->
-                <div class="col-md-6 col-sm-6 col-xs-12 widget sm-margin-30px-bottom xs-text-center">
-                    <div class="widget-title alt-font text-small text-medium-gray text-uppercase margin-15px-bottom font-weight-600">Suscribite a nuestro boletín</div>
-                    <p class="text-small width-90 xs-width-100">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <form id="subscribenewsletterform" action="javascript:void(0)" method="post">
-                        <div class="position-relative newsletter width-95">
-                            <div id="success-subscribe-newsletter" class="no-margin-lr"></div>
-                            <input type="text" id="email" name="email" class="bg-transparent text-small no-margin border-color-medium-dark-gray" placeholder="Enter your email...">
-                            <button id="button-subscribe-newsletter" type="submit" class="btn btn-arrow-small position-absolute border-color-medium-dark-gray"><i class="fas fa-caret-right no-margin-left"></i></button>
-                        </div> 
-                    </form>
-                </div>
+
                 <!-- end newsletter -->
             </div>
         </div>

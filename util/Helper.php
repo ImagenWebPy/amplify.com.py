@@ -758,4 +758,9 @@ class Helper {
         return $sql[0];
     }
 
+    public function getInfoFooter() {
+        $sql = $this->db->select("SELECT SUBSTR(contenido,1,300) as contenido from empresa");
+        return strip_tags($sql[0]['contenido']);
+    }
+
 }
