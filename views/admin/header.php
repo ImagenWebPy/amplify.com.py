@@ -86,8 +86,6 @@ $rol = $_SESSION['usuarioLogueado']['rol'];
                             <li><a href="<?= URL; ?>admin/menu"><i class="fa fa-bars"></i> <span class="nav-label">Menú</span></a></li>
                             <li><a href="<?= URL; ?>admin/redes"><i class="fa fa-share-square-o"></i> <span class="nav-label">Redes</span></a></li>
                             <li><a href="<?= URL; ?>admin/logos"><i class="fa fa-arrows-alt"></i> <span class="nav-label">Logos</span></a></li>
-                            <li><a href="<?= URL; ?>admin/direcciones"><i class="fa fa-map-marker"></i> <span class="nav-label">Direcciones</span></a></li>
-                            <li><a href="<?= URL; ?>admin/metatags"><i class="fa fa-tags"></i> <span class="nav-label">Meta-tags</span></a></li>
                         <?php endif; ?>
                         <?php if ($rol == 'Administrador'): ?>
                             <li>
