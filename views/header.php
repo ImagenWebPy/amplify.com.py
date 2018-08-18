@@ -61,7 +61,7 @@
                     <div class="container nav-header-container">
                         <div class="row">
                             <div class="col-md-2 col-xs-5">
-                                <a href="<?= URL; ?>" title="Amplify" class="logo"><img src="<?= URL; ?>public/images/logo.png" data-rjs="images/logo@2x.png" class="logo-dark default" alt="Pofo"><img src="images/logo-white.png" data-rjs="images/logo-white@2x.png" alt="Pofo" class="logo-light"></a>
+                                <a href="<?= URL; ?>" title="Amplify" class="logo"><img src="<?= URL; ?>public/images/<?= utf8_encode($this->logos['logo']); ?>" data-rjs="images/<?= utf8_encode($this->logos['logo_x2']); ?>" class="logo-dark default" alt="Amplify"></a>
                             </div>
                             <div class="col-md-7 col-xs-2 width-auto pull-right accordion-menu xs-no-padding-right">
                                 <button type="button" class="navbar-toggle collapsed pull-right" data-toggle="collapse" data-target="#navbar-collapse-toggle-1">

@@ -13,6 +13,7 @@ class Metricas extends Controller {
         $this->view->keywords = 'Meta Keywords Métricas';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido();

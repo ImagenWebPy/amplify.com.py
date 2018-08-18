@@ -677,6 +677,66 @@ class Admin_Model extends Model {
         }
     }
 
+    public function unlinkLogoCabecera() {
+        $sql = $this->db->select("SELECT logo FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['logo'])) {
+                unlink($dir . $sql[0]['logo']);
+            }
+        }
+    }
+
+    public function unlinkLogoCabeceraX2() {
+        $sql = $this->db->select("SELECT logo_x2 FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['logo_x2'])) {
+                unlink($dir . $sql[0]['logo_x2']);
+            }
+        }
+    }
+
+    public function unlinkFavicon() {
+        $sql = $this->db->select("SELECT fav_icon FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['fav_icon'])) {
+                unlink($dir . $sql[0]['fav_icon']);
+            }
+        }
+    }
+
+    public function unlinkFaviconApple57() {
+        $sql = $this->db->select("SELECT apple_57 FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['apple_57'])) {
+                unlink($dir . $sql[0]['apple_57']);
+            }
+        }
+    }
+
+    public function unlinkFaviconApple72() {
+        $sql = $this->db->select("SELECT apple_72 FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['apple_72'])) {
+                unlink($dir . $sql[0]['apple_72']);
+            }
+        }
+    }
+
+    public function unlinkFaviconApple114() {
+        $sql = $this->db->select("SELECT apple_114 FROM `logos` WHERE id = 1;");
+        $dir = 'public/images/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['apple_114'])) {
+                unlink($dir . $sql[0]['apple_114']);
+            }
+        }
+    }
+
     public function unlinkImagenPantallasLed($id) {
         $sql = $this->db->select("select imagen from pantallas_led_img where id = $id");
         $dir = 'public/images/pantallas_led/';
@@ -2684,6 +2744,90 @@ class Admin_Model extends Model {
         ));
         $id = $this->db->lastInsertId();
         return $id;
+    }
+
+    public function uploadImgLogo($datos) {
+        $id = 1;
+        $update = array(
+            'logo' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
+    }
+
+    public function uploadImgLogoX2($datos) {
+        $id = 1;
+        $update = array(
+            'logo_x2' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
+    }
+
+    public function uploadImgFavicon($datos) {
+        $id = 1;
+        $update = array(
+            'fav_icon' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
+    }
+
+    public function uploadImgFaviconApple57($datos) {
+        $id = 1;
+        $update = array(
+            'apple_57' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
+    }
+
+    public function uploadImgFaviconApple72($datos) {
+        $id = 1;
+        $update = array(
+            'apple_72' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
+    }
+
+    public function uploadImgFaviconApple114($datos) {
+        $id = 1;
+        $update = array(
+            'apple_114' => $datos['imagen']
+        );
+        $this->db->update('logos', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'content' => $contenido,
+        );
+        return $data;
     }
 
 }

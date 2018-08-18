@@ -14,6 +14,7 @@ class Index extends Controller {
         $this->view->keywords = 'Meta Keywords Inicio';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = '';
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
         
         $this->view->slider = $this->helper->obtenerSlider();

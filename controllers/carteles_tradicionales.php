@@ -13,6 +13,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->keywords = 'Meta Keywords Carteles Tradicionales Asuncion';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Asuncion');
@@ -30,6 +31,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->keywords = 'Meta Keywords Carteles Tradicionales Gran Asuncion';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Gran Asuncion');
@@ -47,6 +49,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->keywords = 'Meta Keywords Carteles Tradicionales Ruteros';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Ruteros');
@@ -64,6 +67,7 @@ class Carteles_tradicionales extends Controller {
         $this->view->keywords = 'Meta Keywords Carteles Tradicionales Urbanos';
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
+        $this->view->logos = $this->helper->getLogos();
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido('Urbanos');

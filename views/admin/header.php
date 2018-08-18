@@ -55,7 +55,6 @@ $rol = $_SESSION['usuarioLogueado']['rol'];
                                     <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?= $_SESSION['usuarioLogueado']['nombre']; ?></strong>
                                         </span> <span class="text-muted text-xs block"><?= $_SESSION['usuarioLogueado']['rol']; ?> <b class="caret"></b></span> </span> </a>
                                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a href="#">Mis Datos</a></li>
                                     <li class="divider"></li>
                                     <li><a href="<?= URL; ?>login/salir">Salir</a></li>
                                 </ul>
