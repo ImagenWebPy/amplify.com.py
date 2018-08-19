@@ -4,11 +4,13 @@ class Controller {
 
     public $helper = '';
     public $pagina = '';
+    public $url = '';
 
     function __construct() {
         $this->view = new View();
         $this->helper = new Helper;
         $this->pagina = $this->helper->getPage();
+        $this->url = $this->helper->getUrl();
     }
 
     /**

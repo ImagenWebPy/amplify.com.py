@@ -7,17 +7,17 @@ class Index extends Controller {
     }
 
     public function index() {
-        
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Inicio';
-        $this->view->description = 'Meta Descripcion Inicio';
-        $this->view->keywords = 'Meta Keywords Inicio';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = '';
         $this->view->logos = $this->helper->getLogos();
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
-        
+
         $this->view->slider = $this->helper->obtenerSlider();
         $this->view->index_seccion_1 = $this->helper->index_seccion_1();
         $this->view->index_seccion_2 = $this->helper->index_seccion_2();

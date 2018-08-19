@@ -8,9 +8,10 @@ class Buses extends Controller {
     
     public function index() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Buses';
-        $this->view->description = 'Meta Descripcion Buses';
-        $this->view->keywords = 'Meta Keywords Buses';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();

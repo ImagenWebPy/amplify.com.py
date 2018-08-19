@@ -763,4 +763,97 @@ class Helper {
         return strip_tags($sql[0]['contenido']);
     }
 
+    public function getMetaTags($url) {
+        $data = array();
+        $title = '';
+        $description = '';
+        $keywords = '';
+        $controlador = (!empty($url[0])) ? $url[0] : '';
+        switch ($controlador) {
+            case 'pantallas_led':
+                $sql = $this->db->select("select title, description, keywords from pantallas_led where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'carteles_tradicionales':
+                switch ($url[1]) {
+                    case 'asuncion':
+                        $sql = $this->db->select("select title, description, keywords from carteles_tradicionales where seccion = 'Asuncion'");
+                        $title = utf8_encode($sql[0]['title']);
+                        $description = utf8_encode($sql[0]['description']);
+                        $keywords = utf8_encode($sql[0]['keywords']);
+                        break;
+                    case 'gran_asuncion':
+                        $sql = $this->db->select("select title, description, keywords from carteles_tradicionales where seccion = 'Gran Asuncion'");
+                        $title = utf8_encode($sql[0]['title']);
+                        $description = utf8_encode($sql[0]['description']);
+                        $keywords = utf8_encode($sql[0]['keywords']);
+                        break;
+                    case 'ruteros':
+                        $sql = $this->db->select("select title, description, keywords from carteles_tradicionales where seccion = 'Ruteros'");
+                        $title = utf8_encode($sql[0]['title']);
+                        $description = utf8_encode($sql[0]['description']);
+                        $keywords = utf8_encode($sql[0]['keywords']);
+                        break;
+                    case 'urbanos':
+                        $sql = $this->db->select("select title, description, keywords from carteles_tradicionales where seccion = 'Urbanos'");
+                        $title = utf8_encode($sql[0]['title']);
+                        $description = utf8_encode($sql[0]['description']);
+                        $keywords = utf8_encode($sql[0]['keywords']);
+                        break;
+                }
+                break;
+            case 'iconicos':
+                $sql = $this->db->select("select title, description, keywords from iconicos where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'buses':
+                $sql = $this->db->select("select title, description, keywords from buses where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'cobertura':
+                $sql = $this->db->select("select title, description, keywords from cobertura where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'metricas':
+                $sql = $this->db->select("select title, description, keywords from metricas where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'empresa':
+                $sql = $this->db->select("select title, description, keywords from empresa where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            case 'contacto':
+                $sql = $this->db->select("select title, description, keywords from contacto where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+            default :
+                $sql = $this->db->select("select title, description, keywords from index_meta where id = 1");
+                $title = utf8_encode($sql[0]['title']);
+                $description = utf8_encode($sql[0]['description']);
+                $keywords = utf8_encode($sql[0]['keywords']);
+                break;
+        }
+
+        $data = array(
+            'description' => $title,
+            'keywords' => $description,
+            'title' => $keywords
+        );
+        return $data;
+    }
+
 }

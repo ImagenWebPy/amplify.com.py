@@ -8,9 +8,10 @@ class Carteles_tradicionales extends Controller {
 
     public function asuncion() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Carteles Tradicionales | Asunción';
-        $this->view->description = 'Meta Descripcion Carteles Tradicionales Asuncion';
-        $this->view->keywords = 'Meta Keywords Carteles Tradicionales Asuncion';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
@@ -27,9 +28,10 @@ class Carteles_tradicionales extends Controller {
 
     public function gran_asuncion() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Carteles Tradicionales | Gran Asunción';
-        $this->view->description = 'Meta Descripcion Carteles Tradicionales Gran Asuncion';
-        $this->view->keywords = 'Meta Keywords Carteles Tradicionales Gran Asuncion';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
@@ -46,9 +48,10 @@ class Carteles_tradicionales extends Controller {
 
     public function ruteros() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Carteles Tradicionales | Ruteros';
-        $this->view->description = 'Meta Descripcion Carteles Tradicionales Ruteros';
-        $this->view->keywords = 'Meta Keywords Carteles Tradicionales Ruteros';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
@@ -65,9 +68,10 @@ class Carteles_tradicionales extends Controller {
 
     public function urbanos() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Carteles Tradicionales | Urbanos';
-        $this->view->description = 'Meta Descripcion Carteles Tradicionales Urbanos';
-        $this->view->keywords = 'Meta Keywords Carteles Tradicionales Urbanos';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();

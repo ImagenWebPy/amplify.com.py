@@ -8,9 +8,10 @@ class Metricas extends Controller {
 
     public function index() {
         #PARAMETRO OBLIGATORIOS
-        $this->view->title = TITLE . 'Métricas';
-        $this->view->description = 'Meta Descripcion Métricas';
-        $this->view->keywords = 'Meta Keywords Métricas';
+        $metas = $this->helper->getMetaTags($this->url);
+        $this->view->title = TITLE . $metas['title'];
+        $this->view->description = $metas['description'];
+        $this->view->keywords = $metas['keywords'];
         $this->view->redes = $this->helper->obtenerRedes(3);
         $this->view->pagina = $this->pagina;
         $this->view->logos = $this->helper->getLogos();
