@@ -66,7 +66,7 @@
                                         -Tamaño: 2MB<br>
                                         <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
                                     </div>
-                                    <div class="html5fileupload fileImagenBuses" data-max-filesize="2048000" data-url="<?= URL; ?>/admin/uploadImgBuses" data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
+                                    <div class="html5fileupload fileImagenBuses" data-max-filesize="2048000" data-url="<?= URL; ?>/admin/uploadImgHeaderBuses" data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
                                         <input type="file" name="file_archivo" />
                                     </div>
                                     <script>

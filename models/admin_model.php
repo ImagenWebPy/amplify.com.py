@@ -1761,6 +1761,20 @@ class Admin_Model extends Model {
         );
         return $datos;
     }
+    
+    public function uploadImgHeaderBuses($data) {
+        $id = 1;
+        $update = array(
+            'header_img' => $data['imagen']
+        );
+        $this->db->update('buses', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/header/' . $data['imagen'] . '">';
+        $datos = array(
+            "result" => TRUE,
+            'content' => $contenido
+        );
+        return $datos;
+    }
 
     public function uploadImgContactoFormulario($data) {
         $id = 1;
