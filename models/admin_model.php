@@ -58,6 +58,36 @@ class Admin_Model extends Model {
         return $json;
     }
 
+    public function listadoDTEquipo() {
+        $sql = $this->db->select("SELECT * FROM equipo ORDER BY orden ASC;");
+        $datos = array();
+        foreach ($sql as $item) {
+            $id = $item['id'];
+            if ($item['estado'] == 1) {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="equipo" data-rowid="equipo_" data-tabla="equipo" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+            } else {
+                $estado = '<a class="pointer btnCambiarEstado" data-seccion="equipo" data-rowid="equipo_" data-tabla="equipo" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+            }
+            $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTEquipo"><i class="fa fa-edit"></i> Editar </a>';
+            if (!empty($item['imagen'])) {
+                $img = '<img src="' . URL . 'public/images/equipo/' . $item['imagen'] . '" style="width: 160px;">';
+            } else {
+                $img = '-';
+            }
+            array_push($datos, array(
+                "DT_RowId" => "equipo_$id",
+                'orden' => $item['orden'],
+                'imagen' => $img,
+                'nombre' => utf8_encode($item['nombre']),
+                'cargo' => utf8_encode($item['cargo']),
+                'estado' => $estado,
+                'editar' => $btnEditar
+            ));
+        }
+        $json = '{"data": ' . json_encode($datos) . '}';
+        return $json;
+    }
+
     private function rowDataTable($seccion, $tabla, $id) {
 //$sql = $this->db->select("SELECT * FROM $tabla WHERE id = $id;");
         $data = '';
@@ -102,6 +132,25 @@ class Admin_Model extends Model {
                         . '<td>' . $img . '</td>'
                         . '<td>' . utf8_encode($sql[0]['titulo']) . '</td>'
                         . '<td>' . utf8_encode($sql[0]['texto_complementario']) . '</td>'
+                        . '<td>' . $estado . '</td>'
+                        . '<td>' . $btnEditar . '</td>';
+                break;
+            case 'equipo':
+                if ($sql[0]['estado'] == 1) {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="equipo" data-rowid="equipo_" data-tabla="equipo" data-campo="estado" data-id="' . $id . '" data-estado="1"><span class="label label-primary">Activo</span></a>';
+                } else {
+                    $estado = '<a class="pointer btnCambiarEstado" data-seccion="equipo" data-rowid="equipo_" data-tabla="equipo" data-campo="estado" data-id="' . $id . '" data-estado="0"><span class="label label-danger">Inactivo</span></a>';
+                }
+                $btnEditar = '<a class="editDTContenido pointer btn-xs" data-id="' . $id . '" data-url="modalEditarDTEquipo"><i class="fa fa-edit"></i> Editar </a>';
+                if (!empty($sql[0]['imagen'])) {
+                    $img = '<img src="' . URL . 'public/images/equipo/' . $sql[0]['imagen'] . '" style="width: 160px;">';
+                } else {
+                    $img = '';
+                }
+                $data = '<td>' . $sql[0]['orden'] . '</td>'
+                        . '<td>' . $img . '</td>'
+                        . '<td>' . utf8_encode($sql[0]['nombre']) . '</td>'
+                        . '<td>' . utf8_encode($sql[0]['cargo']) . '</td>'
                         . '<td>' . $estado . '</td>'
                         . '<td>' . $btnEditar . '</td>';
                 break;
@@ -240,7 +289,7 @@ class Admin_Model extends Model {
                             <div class="alert alert-info alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
                                 Detalles de la imagen a subir:<br>
-                                -Formato: JPG,PNG (La imagen principal tiene que ser PNG transparente)<br>
+                                -Formato: JPG,PNG<br>
                                 -Dimensión: Imagen Normal: 1800 x 800<br>
                                 -Tamaño: Hasta 2MB<br>
                                 <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
@@ -275,6 +324,118 @@ class Admin_Model extends Model {
                 </script>';
         $data = array(
             'titulo' => 'Editar Slider',
+            'content' => $modal
+        );
+        return json_encode($data);
+    }
+
+    public function modalEditarDTEquipo($datos) {
+        $id = $datos['id'];
+        $sql = $this->db->select("select * from equipo where id = $id");
+        $checked = ($sql[0]['estado'] == 1) ? 'checked' : '';
+        $checkedTelefono = ($sql[0]['mostrar_telefono'] == 1) ? 'checked' : '';
+        $checkedEmail = ($sql[0]['mostrar_email'] == 1) ? 'checked' : '';
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Modificar Datos del Equipo</h3>
+                    </div>
+                    <div class="row">
+                        <form id="frmEditarEquipo" method="POST">
+                            <input type="hidden" name="id" value="' . $id . '">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Orden</label>
+                                        <input type="text" name="orden" class="form-control" placeholder="Orden" value="' . utf8_encode($sql[0]['orden']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="estado" value="1" ' . $checked . '> <i></i> Mostrar </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" value="' . utf8_encode($sql[0]['nombre']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Cargo</label>
+                                        <input type="text" name="cargo" class="form-control" value="' . utf8_encode($sql[0]['cargo']) . '">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" value="' . utf8_encode($sql[0]['email']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="mostrar_email" value="1" ' . $checkedEmail . '> <i></i> Mostrar Email </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Teléfono</label>
+                                        <input type="text" name="telefono" class="form-control" value="' . utf8_encode($sql[0]['telefono']) . '">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="mostrar_telefono" value="1" ' . $checkedTelefono . '> <i></i> Mostrar Teléfono </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg">Editar Contenido</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="col-md-12">
+                            <h3>Imagen</h3>
+                            <div class="alert alert-info alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                Detalles de la imagen a subir:<br>
+                                -Formato: JPG,PNG<br>
+                                -Dimensión: Imagen Normal: 700 x 892<br>
+                                -Tamaño: Hasta 2MB<br>
+                                <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
+                            </div>
+                            <div class="html5fileupload fileEquipo" data-max-filesize="2048000" data-url="' . URL . 'admin/uploadImgEquipo" data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
+                                <input type="file" name="file_archivo" />
+                            </div>
+                            <script>
+                                $(".html5fileupload.fileEquipo").html5fileupload({
+                                    data: {id: ' . $id . '},
+                                    onAfterStartSuccess: function (response) {
+                                        $("#imgEquipo" + response.id).html(response.content);
+                                        $("#equipo_" + response.id).html(response.row);
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-12" id="imgEquipo' . $id . '">';
+        if (!empty($sql[0]['imagen'])) {
+            $modal .= '     <img class="img-responsive" src="' . URL . 'public/images/equipo/' . $sql[0]['imagen'] . '">';
+        }
+        $modal .= '     </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green",
+                            radioClass: "iradio_square-green",
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Editar Integrante',
             'content' => $modal
         );
         return json_encode($data);
@@ -632,6 +793,28 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function frmEditarEquipo($datos) {
+        $id = $datos['id'];
+        $update = array(
+            'orden' => utf8_decode($datos['orden']),
+            'nombre' => utf8_decode($datos['nombre']),
+            'cargo' => utf8_decode($datos['cargo']),
+            'email' => utf8_decode($datos['email']),
+            'telefono' => utf8_decode($datos['telefono']),
+            'mostrar_email' => utf8_decode($datos['mostrar_email']),
+            'mostrar_telefono' => utf8_decode($datos['mostrar_telefono']),
+            'estado' => utf8_decode($datos['estado'])
+        );
+        $this->db->update('equipo', $update, "id = $id");
+        $data = array(
+            'type' => 'success',
+            'id' => $id,
+            'content' => $this->rowDataTable('equipo', 'equipo', $id),
+            'message' => 'Se ha actualizado el contenido del equipo'
+        );
+        return $data;
+    }
+
     public function frmEditarCoberturaUbicacion($datos) {
         $id = $datos['id'];
         $update = array(
@@ -667,9 +850,35 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function uploadImgEquipo($datos) {
+        $id = $datos['id'];
+        $update = array(
+            'imagen' => $datos['imagen']
+        );
+        $this->db->update('equipo', $update, "id = $id");
+        $contenido = '<img class="img-responsive" src="' . URL . 'public/images/equipo/' . $datos['imagen'] . '">';
+        $data = array(
+            "result" => true,
+            'id' => $id,
+            'content' => $contenido,
+            'row' => $this->rowDataTable('equipo', 'equipo', $id)
+        );
+        return $data;
+    }
+
     public function unlinkImagenSlider($id) {
         $sql = $this->db->select("select imagen from slider where id = $id");
         $dir = 'public/images/slider/';
+        if (!empty($sql)) {
+            if (file_exists($dir . $sql[0]['imagen'])) {
+                unlink($dir . $sql[0]['imagen']);
+            }
+        }
+    }
+
+    public function unlinkImagenEquipo($id) {
+        $sql = $this->db->select("select imagen from equipo where id = $id");
+        $dir = 'public/images/equipo/';
         if (!empty($sql)) {
             if (file_exists($dir . $sql[0]['imagen'])) {
                 unlink($dir . $sql[0]['imagen']);
@@ -859,6 +1068,98 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    public function modalAgregarEquipo() {
+        $modal = '<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Agregar Integrante al Equipo</h3>
+                    </div>
+                    <div class="row">
+                        <form role="form" action="' . URL . '/admin/frmAgregarEquipo" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Orden</label>
+                                        <input type="text" name="orden" class="form-control" placeholder="Orden" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="estado" value="1"> <i></i> Mostrar </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Cargo</label>
+                                        <input type="text" name="cargo" class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="mostrar_email" value="1"> <i></i> Mostrar Email </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Teléfono</label>
+                                        <input type="text" name="telefono" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="i-checks"><label> <input type="checkbox" name="mostrar_telefono" value="1"> <i></i> Mostrar Teléfono </label></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Imagen</h3>
+                                    <div class="alert alert-info alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        Detalles de la imagen a subir:<br>
+                                        -Formato: JPG,PNG<br>
+                                        -Dimensión: Imagen Normal: 700 x 892<br>
+                                        -Tamaño: Hasta 2MB<br>
+                                        <strong>Obs.: Las imagenes serán redimensionadas automaticamente a la dimensión especificada y se reducirá la calidad de la misma.</strong>
+                                    </div>
+                                    <div class="html5fileupload fileAgregarEquipo" data-form="true" data-max-filesize="2048000"  data-valid-extensions="JPG,JPEG,jpg,png,jpeg,PNG" style="width: 100%;">
+                                        <input type="file" name="file_archivo" />
+                                    </div>
+                                    <script>
+                                        $(".html5fileupload.fileAgregarEquipo").html5fileupload();
+                                    </script>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-primary btn-lg">Agregar Integrante</button>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $(".i-checks").iCheck({
+                            checkboxClass: "icheckbox_square-green",
+                            radioClass: "iradio_square-green",
+                        });
+                    });
+                </script>';
+        $data = array(
+            'titulo' => 'Agregar Slider',
+            'content' => $modal
+        );
+        return $data;
+    }
+
     public function frmAgregarSlider($datos) {
         $this->db->insert('slider', array(
             'titulo' => utf8_decode($datos['titulo']),
@@ -866,6 +1167,21 @@ class Admin_Model extends Model {
             'texto_boton' => utf8_decode($datos['texto_boton']),
             'enlace' => utf8_decode($datos['enlace']),
             'orden' => $datos['orden'],
+            'estado' => $datos['estado']
+        ));
+        $id = $this->db->lastInsertId();
+        return $id;
+    }
+
+    public function frmAgregarEquipo($datos) {
+        $this->db->insert('equipo', array(
+            'nombre' => utf8_decode($datos['nombre']),
+            'cargo' => utf8_decode($datos['cargo']),
+            'email' => utf8_decode($datos['email']),
+            'telefono' => utf8_decode($datos['telefono']),
+            'orden' => $datos['orden'],
+            'mostrar_email' => $datos['mostrar_email'],
+            'mostrar_telefono' => $datos['mostrar_telefono'],
             'estado' => $datos['estado']
         ));
         $id = $this->db->lastInsertId();
@@ -919,6 +1235,14 @@ class Admin_Model extends Model {
             'imagen' => $imagenes['imagenes']
         );
         $this->db->update('slider', $update, "id = $id");
+    }
+    
+    public function frmAddEquipoImg($imagenes) {
+        $id = $imagenes['id'];
+        $update = array(
+            'imagen' => $imagenes['imagenes']
+        );
+        $this->db->update('equipo', $update, "id = $id");
     }
 
     public function frmAddImgPantallasLed($imagenes) {
@@ -1761,7 +2085,7 @@ class Admin_Model extends Model {
         );
         return $datos;
     }
-    
+
     public function uploadImgHeaderBuses($data) {
         $id = 1;
         $update = array(

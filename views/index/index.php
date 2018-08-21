@@ -157,10 +157,10 @@
                                                 }
                                                 ?>
                                             </span>
-                                            <div class="separator-line-horrizontal-full bg-deep-pink margin-eleven-tb"></div>
+                                            <!--<div class="separator-line-horrizontal-full bg-deep-pink margin-eleven-tb"></div>-->
                                             <?php if (!empty(Helper::obtenerRedesEquipo($item['id']))): ?>
                                                 <?php foreach (Helper::obtenerRedesEquipo($item['id']) as $red): ?>
-                                                    <a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>
+                                                    <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </div>
