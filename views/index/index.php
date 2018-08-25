@@ -117,9 +117,9 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 cover-background sm-height-500px xs-height-350px wow fadeIn" style="background-image:url('<?= URL; ?>public/images/<?= utf8_encode($this->index_seccion_4['imagen']); ?>');"><div class="xs-height-400px"></div></div>
                 <div class="col-md-6 col-sm-12 col-xs-12 display-table wow fadeInRight last-paragraph-no-margin sm-text-center">
                     <div class="display-table-cell vertical-align-middle padding-fifteen-all md-padding-ten-all sm-padding-90px-all xs-text-center xs-no-padding-lr xs-padding-40px-tb">
-                        <span class="text-medium margin-20px-bottom display-block alt-font"><?= utf8_encode($this->index_seccion_3['subtitulo']); ?></span>
-                        <h4 class="alt-font text-light-gray"><?= utf8_encode($this->index_seccion_3['titulo']); ?></h4>
-                        <p class="width-85 md-width-100"><?= utf8_encode($this->index_seccion_3['descripcion']); ?></p>
+                        <span class="text-medium margin-20px-bottom display-block alt-font"><?= utf8_encode($this->index_seccion_4['subtitulo']); ?></span>
+                        <h4 class="alt-font text-light-gray"><?= utf8_encode($this->index_seccion_4['titulo']); ?></h4>
+                        <p class="width-85 md-width-100"><?= utf8_encode($this->index_seccion_4['descripcion']); ?></p>
                     </div>
                 </div>
             </div>

@@ -595,7 +595,7 @@ class Helper {
                                 ORDER BY
                                         orden ASC
                                 $limite");
-        return $sql;
+        return (!empty($sql)) ? $sql : NULL;
     }
 
     /**
@@ -613,7 +613,7 @@ class Helper {
                                         estado = 1
                                 ORDER BY
                                         orden ASC");
-        return $sql;
+        return (!empty($sql)) ? $sql : NULL;
     }
 
     /**
@@ -643,7 +643,7 @@ class Helper {
                                         estado = 1
                                 ORDER BY
                                         orden ASC");
-        return $sql;
+        return (!empty($sql)) ? $sql : NULL;
     }
 
     /**
@@ -663,7 +663,7 @@ class Helper {
                                 WHERE
                                         id = 1
                                 AND estado = 1");
-        return $sql[0];
+        return (!empty($sql[0])) ? $sql[0] : NULL;
     }
 
     /**
@@ -681,7 +681,7 @@ class Helper {
                                 WHERE
                                         id = 1
                                 AND estado = 1");
-        return $sql[0];
+        return (!empty($sql[0])) ? $sql[0] : NULL;
     }
 
     /**
@@ -697,7 +697,7 @@ class Helper {
                                 WHERE
                                         id = 1
                                 AND estado = 1");
-        return $sql[0];
+        return (!empty($sql[0])) ? $sql[0] : NULL;
     }
 
     /**
@@ -720,7 +720,7 @@ class Helper {
                                         estado = 1
                                 ORDER BY
                                         orden ASC");
-        return $sql;
+        return (!empty($sql)) ? $sql : NULL;
     }
 
     public static function obtenerRedesEquipo($id_equipo) {
@@ -737,7 +737,7 @@ class Helper {
                                 AND estado = 1
                                 ORDER BY
                                         orden ASC");
-        return $sql;
+        return (!empty($sql)) ? $sql : NULL;
     }
 
     public function getErrorContenido() {
