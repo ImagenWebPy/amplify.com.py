@@ -42,7 +42,7 @@
         <div class="footer-bottom border-top border-color-medium-dark-gray padding-30px-top">
             <div class="row">
                 <!-- start copyright -->
-                <div class="col-md-6 col-sm-6 col-xs-12 text-right text-small xs-text-center pull-right">Powered by <a href="https://www.imagenwebhq.com" target="_blank" title="ImagenWeb"><img src="<?= URL; ?>public/images/iweb-logo.png" alt="Imagen Web" style="position: relative; width: 130px; top: -2px;"></a></div>
+                <div class="col-md-6 col-sm-6 col-xs-12 text-right text-small xs-text-center pull-right">Powered by <a href="https://www.imagenwebhq.com" target="_blank" title="ImagenWeb"><img src="<?= URL; ?>public/images/iweb-logo-bn.png" alt="Imagen Web" style="position: relative; width: 130px; top: -2px;"></a></div>
                 <!-- end copyright -->
             </div>
         </div>
