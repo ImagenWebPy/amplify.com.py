@@ -9,17 +9,17 @@
                                         <div class="display-table width-100 height-100">
                                             <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
                 <?php if (!empty($item['titulo'])): ?>
-                                                                <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
+                                                                    <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
                 <?php endif; ?>
                 <?php if (!empty($item['texto_complementario'])): ?>
-                                                                <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
+                                                                    <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
                 <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-6 col-xs-12 no-padding-lr cover-background height-700px xs-height-400px" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');"></div>
                                 </div>-->
-                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');">
+                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>'); background-color: #FFE30E; background-blend-mode: multiply;" >
                     <div class="container-fluid slider-half-screen position-relative">
                         <div class="slider-typography text-left">
                             <div class="slider-text-middle-main">
@@ -160,7 +160,7 @@
                                             <!--<div class="separator-line-horrizontal-full bg-deep-pink margin-eleven-tb"></div>-->
                                             <?php if (!empty(Helper::obtenerRedesEquipo($item['id']))): ?>
                                                 <?php foreach (Helper::obtenerRedesEquipo($item['id']) as $red): ?>
-                                                    <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
+                                                            <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </div>
