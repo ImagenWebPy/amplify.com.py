@@ -352,6 +352,12 @@ class Admin extends Controller {
         echo $data;
     }
 
+    public function listadoDTNoticias() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = $this->model->listadoDTNoticias();
+        echo $data;
+    }
+
     public function frmEditarSlider() {
         header('Content-type: application/json; charset=utf-8');
         $datos = array(
@@ -734,7 +740,7 @@ class Admin extends Controller {
         }
         header('Location:' . URL . 'admin/inicio/');
     }
-    
+
     public function frmAgregarEquipo() {
         if (!empty($_POST)) {
             $data = array(
@@ -1255,6 +1261,44 @@ class Admin extends Controller {
                 'imagen' => $filename
             );
             $response = $this->model->uploadImgHeaderPantallasLed($data);
+            echo json_encode($response);
+        }
+    }
+   
+    public function uploadImgHeaderIconicos() {
+        if (!empty($_POST)) {
+            $error = false;
+            $error = false;
+            $absolutedir = dirname(__FILE__);
+            $dir = 'public/images/header/';
+            $serverdir = $dir;
+            $tmp = explode(',', $_POST['file']);
+            $file = base64_decode($tmp[1]);
+            $ext = explode('.', $_POST['filename']);
+            $extension = strtolower(end($ext));
+            $name = $_POST['name'];
+            $filename = $this->helper->cleanUrl($name);
+            $filename = $filename . '.' . $extension;
+            $handle = fopen($serverdir . $filename, 'w');
+            fwrite($handle, $file);
+            fclose($handle);
+            #############
+            #SE REDIMENSIONA LA IMAGEN
+            #############
+            # ruta de la imagen a redimensionar 
+            $imagen = $serverdir . $filename;
+            # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe 
+            $imagen_final = $filename;
+            $ancho = 1920;
+            $alto = 1100;
+            $this->helper->redimensionar($imagen, $imagen_final, $ancho, $alto, $serverdir);
+
+            #############
+            header('Content-type: application/json; charset=utf-8');
+            $data = array(
+                'imagen' => $filename
+            );
+            $response = $this->model->uploadImgHeaderIconicos($data);
             echo json_encode($response);
         }
     }

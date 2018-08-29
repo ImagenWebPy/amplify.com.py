@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-6 col-xs-12 no-padding-lr cover-background height-700px xs-height-400px" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');"></div>
                                 </div>-->
-                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>'); background-color: rgba(255, 227, 14,0.45); background-blend-mode: multiply;" >
+                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>'); background-color: rgba(255, 227, 14,0.60); background-blend-mode: multiply;" >
                     <div class="container-fluid slider-half-screen position-relative">
                         <div class="slider-typography text-left">
                             <div class="slider-text-middle-main">
@@ -166,7 +166,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="team-overlay bg-extra-dark-gray opacity8"></div>
+                                <div class="team-overlay bg-extra-dark-gray3 opacity8"></div>
                             </div>
                             <figcaption>
                                 <div class="team-member-position margin-20px-top text-center">

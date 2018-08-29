@@ -2,7 +2,7 @@
     </div>
 <?php endif; ?>
 <!-- start footer --> 
-<footer class="footer-classic-dark bg-extra-dark-gray padding-five-bottom xs-padding-30px-bottom">
+<footer class="footer-classic-dark bg-extra-dark-gray2 padding-five-bottom xs-padding-30px-bottom">
     <div class="bg-dark-footer padding-50px-tb xs-padding-30px-tb">
         <div class="container">
             <div class="row equalize xs-equalize-auto">
@@ -23,21 +23,21 @@
             </div>
         </div>
     </div>
-    <div class="footer-widget-area padding-five-top padding-30px-bottom xs-padding-30px-top">
+<!--    <div class="footer-widget-area padding-five-top padding-30px-bottom xs-padding-30px-top">
         <div class="container">
             <div class="row">
-                <!-- start about -->
+                 start about 
                 <div class="col-md-12 col-sm-12 col-xs-12 widget sm-margin-30px-bottom xs-text-center">
                     <div class="widget-title alt-font text-small text-medium-gray text-uppercase margin-15px-bottom font-weight-600">La Empresa</div>
                     <p class="text-small width-95 xs-width-100 no-margin"><?= utf8_encode($this->footerInfo); ?></p>
                 </div>
-                <!-- end about -->
-                <!-- start newsletter -->
+                 end about 
+                 start newsletter 
 
-                <!-- end newsletter -->
+                 end newsletter 
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="container">
         <div class="footer-bottom border-top border-color-medium-dark-gray padding-30px-top">
             <div class="row">
