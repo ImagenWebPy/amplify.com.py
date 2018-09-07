@@ -9,10 +9,10 @@
                                         <div class="display-table width-100 height-100">
                                             <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
                 <?php if (!empty($item['titulo'])): ?>
-                                                                        <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
+                                                                            <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
                 <?php endif; ?>
                 <?php if (!empty($item['texto_complementario'])): ?>
-                                                                        <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
+                                                                            <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -90,7 +90,7 @@
                     <div class="display-table-cell vertical-align-middle md-padding-15px-lr xs-text-center xs-padding-five-lr xs-padding-ten-bottom width-100">
                         <span class="alt-font text-medium-gray display-block margin-10px-bottom"><?= utf8_encode($this->index_seccion_3['subtitulo']); ?></span>
                         <h6 class="text-light-gray alt-font width-90 sm-width-100"><?= utf8_encode($this->index_seccion_3['titulo']); ?></h6>
-                        <p class="width-85 md-width-90 sm-width-100"><?= utf8_encode($this->index_seccion_3['descripcion']); ?></p>
+                        <p class="width-85 md-width-90 sm-width-100" style=" font-size: 18px;"><?= utf8_encode($this->index_seccion_3['descripcion']); ?></p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-lg-offset-1 col-md-3 col-sm-12 col-xs-12 text-center display-table sm-margin-five-bottom wow fadeIn">
@@ -101,7 +101,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-left display-table wow fadeIn" data-wow-delay="0.2s">
                     <div class="display-table-cell vertical-align-middle text-white bg-deep-pink padding-35px-lr md-padding-15px-all sm-padding-30px-all last-paragraph-no-margin">
                         <div class="text-large margin-15px-bottom"><?= utf8_encode($this->index_seccion_3['titulo_cuadro']); ?></div>
-                        <p><?= utf8_encode($this->index_seccion_3['descripcion_cuadro']); ?></p>
+                        <p style="font-size: 16px;"><?= utf8_encode($this->index_seccion_3['descripcion_cuadro']); ?></p>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                                             <!--<div class="separator-line-horrizontal-full bg-deep-pink margin-eleven-tb"></div>-->
                                             <?php if (!empty(Helper::obtenerRedesEquipo($item['id']))): ?>
                                                 <?php foreach (Helper::obtenerRedesEquipo($item['id']) as $red): ?>
-                                                                    <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
+                                                                            <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </div>

@@ -1264,7 +1264,7 @@ class Admin extends Controller {
             echo json_encode($response);
         }
     }
-   
+
     public function uploadImgHeaderIconicos() {
         if (!empty($_POST)) {
             $error = false;
@@ -2153,6 +2153,57 @@ class Admin extends Controller {
             $response = $this->model->uploadImgFaviconApple114($data);
             echo json_encode($response);
         }
+    }
+
+    public function rptVisitasPaginas() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'fechaInicio' => $this->helper->cleanInput($_POST['fechaInicio']),
+            'fechaFin' => $this->helper->cleanInput($_POST['fechaFin']),
+            'mostrar' => $_POST['mostrar']
+        );
+        $data = $this->model->rptVisitasPaginas($datos);
+        echo json_encode($data);
+    }
+
+    public function rptCantidadVisitasDia() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'fechaInicio' => $this->helper->cleanInput($_POST['fechaInicio']),
+            'fechaFin' => $this->helper->cleanInput($_POST['fechaFin'])
+        );
+        $data = $this->model->rptCantidadVisitasDia($datos);
+        echo json_encode($data);
+    }
+
+    public function rptUsuarios() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'fechaInicio' => $this->helper->cleanInput($_POST['fechaInicio']),
+            'fechaFin' => $this->helper->cleanInput($_POST['fechaFin'])
+        );
+        $data = $this->model->rptUsuarios($datos);
+        echo json_encode($data);
+    }
+
+    public function rptDispositivos() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'fechaInicio' => $this->helper->cleanInput($_POST['fechaInicio']),
+            'fechaFin' => $this->helper->cleanInput($_POST['fechaFin'])
+        );
+        $data = $this->model->rptDispositivos($datos);
+        echo json_encode($data);
+    }
+
+    public function rptPaginasSesion() {
+        header('Content-type: application/json; charset=utf-8');
+        $datos = array(
+            'fechaInicio' => $this->helper->cleanInput($_POST['fechaInicio']),
+            'fechaFin' => $this->helper->cleanInput($_POST['fechaFin'])
+        );
+        $data = $this->model->rptPaginasSesion($datos);
+        echo json_encode($data);
     }
 
 }

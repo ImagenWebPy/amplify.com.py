@@ -49,11 +49,22 @@
         <![endif]-->
         <script type="text/javascript" src="<?= URL; ?>public/js/jquery.js"></script>
         <script type="text/javascript" src="<?= URL; ?>public/js/custom.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125412067-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+
+            gtag('config', 'UA-125412067-1');
+        </script>
     </head>
     <body>
-        <?php if (empty($this->pagina)): ?>
+            <?php if (empty($this->pagina)): ?>
             <div class="box-layout">
-            <?php endif; ?>
+<?php endif; ?>
             <!-- start header -->
             <header>
                 <!-- start navigation -->
@@ -96,7 +107,7 @@
                                 <div class="header-social-icon xs-display-none">
                                     <?php foreach ($this->redes as $item): ?>
                                         <a href="<?= utf8_encode($item['url']); ?>" title="<?= utf8_encode($item['descripcion']); ?>" target="_blank"><i class="<?= utf8_encode($item['fontawesome']); ?>" aria-hidden="true"></i></a>
-                                    <?php endforeach; ?>
+<?php endforeach; ?>
                                 </div>
                             </div>
                         </div>

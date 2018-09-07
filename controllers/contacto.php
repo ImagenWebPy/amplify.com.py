@@ -27,4 +27,16 @@ class Contacto extends Controller {
         $this->view->render('footer');
     }
 
+    public function contacto() {
+        header('Content-type: application/json; charset=utf-8');
+        $data = array(
+            'nombre' => (!empty($_POST['name'])) ? $this->helper->cleanInput($_POST['name']) : NULL,
+            'email' => (!empty($_POST['email'])) ? $this->helper->cleanInput($_POST['email']) : NULL,
+            'telefono' => (!empty($_POST['phone'])) ? $this->helper->cleanInput($_POST['phone']) : NULL,
+            'mensaje' => (!empty($_POST['comment'])) ? $this->helper->cleanInput($_POST['comment']) : NULL
+        );
+        $datos = $this->model->contacto($data);
+        echo json_encode($datos);
+    }
+
 }

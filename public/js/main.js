@@ -1842,8 +1842,9 @@ $(document).ready(function () {
         if (error) {
             $.ajax({
                 type: "POST",
-                url: "email-templates/project-contact.php",
+                url: "http://amplify.com.py/contacto/contacto",
                 data: $("#project-contact-form").serialize(),
+                dataType: 'json',
                 success: function (result) {
                     // Un-comment below code to redirect user to thank you page.
                     //window.location.href="thank-you.html";
@@ -1887,12 +1888,11 @@ $(document).ready(function () {
         if (error) {
             $.ajax({
                 type: "POST",
-                url: "email-templates/project-contact.php",
+                url: "http://amplify.com.py/contacto/contacto",
                 data: $("#project-contact-form-4").serialize(),
                 success: function (result) {
                     // Un-comment below code to redirect user to thank you page.
                     //window.location.href="thank-you.html";
-
                     $('input[type=text],textarea').each(function () {
                         $(this).val('');
                     });
