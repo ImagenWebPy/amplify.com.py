@@ -1,6 +1,6 @@
 <!-- start slider section --> 
-<section class="no-padding main-slider height-100 mobile-height wow fadeIn">
-    <div class="swiper-full-screen swiper-container height-100 width-100 white-move">
+<section class="no-padding main-slider height-100 mobile-height wow fadeIn ">
+    <div class="swiper-full-screen swiper-container height-100 width-100 black-move">
         <div class="swiper-wrapper">
             <?php foreach ($this->slider as $item): ?>
                 <!-- start slider item -->
@@ -9,17 +9,17 @@
                                         <div class="display-table width-100 height-100">
                                             <div class="display-table-cell vertical-align-middle text-left padding-twelve-all xs-padding-five-all">
                 <?php if (!empty($item['titulo'])): ?>
-                                                                            <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
+                                                                                                                <h6 class="title-large text-white margin-auto alt-font font-weight-600 letter-spacing-minus-3"><?= utf8_encode($item['titulo']); ?></h6>
                 <?php endif; ?>
                 <?php if (!empty($item['texto_complementario'])): ?>
-                                                                            <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
+                                                                                                                <span class="text-large text-middle-line font-weight-300 margin-30px-top width-65 md-width-75 sm-width-90 text-white display-block xs-margin-15px-top"><?= utf8_encode($item['texto_complementario']); ?></span>
                 <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-6 col-xs-12 no-padding-lr cover-background height-700px xs-height-400px" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');"></div>
                                 </div>-->
-                <div class="swiper-slide cover-background xs-background-image-center" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>'); background-color: rgba(255, 227, 14,0.60); background-blend-mode: multiply;" >
+                <div class="swiper-slide cover-background" style="background-image:url('<?= URL; ?>public/images/slider/<?= utf8_encode($item['imagen']); ?>');" >
                     <div class="container-fluid slider-half-screen position-relative">
                         <div class="slider-typography text-left">
                             <div class="slider-text-middle-main">
@@ -40,7 +40,7 @@
             <?php endforeach; ?>
         </div>
         <!-- start slider pagination -->
-        <div class="swiper-pagination swiper-pagination-square swiper-pagination-white swiper-full-screen-pagination"></div>
+        <div class="swiper-pagination swiper-full-screen-pagination"></div>
         <div class="swiper-button-next swiper-button-black-highlight display-none"></div>
         <div class="swiper-button-prev swiper-button-black-highlight display-none"></div>
         <!-- end slider pagination -->
@@ -48,13 +48,13 @@
 </section>
 <!-- end slider section -->
 <!-- start feature box section -->
-<section id="about" class="wow fadeIn">
+<section id="about" class="wow fadeIn" style="background-color: rgba(255, 227, 15,0.8);">
     <div class="container">
         <?php if (!empty($this->index_seccion_1)): ?>
             <div class="row">
                 <!-- start feature box item -->
                 <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 text-center center-col margin-eight-bottom xs-margin-30px-bottom">
-                    <span class="alt-font text-deep-pink text-medium margin-5px-bottom display-block"><?= utf8_encode($this->index_seccion_1['titulo']) ?></span>
+                    <span class="alt-font text-deep-pink text-medium margin-5px-bottom display-block" style="color: #fff;"><?= utf8_encode($this->index_seccion_1['titulo']) ?></span>
                     <?= utf8_encode($this->index_seccion_1['contenido']) ?>
                 </div>
                 <!-- end feature box item -->
@@ -67,7 +67,7 @@
                     <div class="col-md-4 col-sm-4 col-xs-12 xs-margin-30px-bottom xs-text-center wow fadeInUp last-paragraph-no-margin">
                         <div class="col-md-3 col-sm-4 col-xs-12 no-padding-left pull-left xs-no-padding-right">
                             <i class="<?= utf8_encode($item['fontawesome']); ?> seccion2Font text-medium-gray xs-margin-10px-bottom position-relative top-minus3"></i>
-                            <span class="separator-line-verticle-large margin-ten-right bg-deep-pink vertical-align-top pull-right margin-two-top hidden-xs"></span>
+                            <span class="separator-line-verticle-large margin-ten-right bg-deep-pink vertical-align-top pull-right margin-two-top hidden-xs" style="background-color: #fff;"></span>
                         </div>
                         <div class="col-md-9 col-sm-8 col-xs-12 sm-no-padding-lr">
                             <span class="text-medium margin-four-bottom text-extra-dark-gray alt-font display-block sm-margin-10px-bottom xs-margin-5px-bottom"><?= utf8_encode($item['titulo']); ?></span>
@@ -129,7 +129,7 @@
 <?php endif; ?>
 <?php if (!empty($this->index_seccion_5)): ?>
     <!-- start team section -->
-    <section class="wow fadeIn">
+    <section class="wow fadeIn bg-light-gray">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-sm-6 col-xs-12 center-col margin-eight-bottom sm-margin-40px-bottom xs-margin-30px-bottom text-center">
@@ -160,7 +160,7 @@
                                             <!--<div class="separator-line-horrizontal-full bg-deep-pink margin-eleven-tb"></div>-->
                                             <?php if (!empty(Helper::obtenerRedesEquipo($item['id']))): ?>
                                                 <?php foreach (Helper::obtenerRedesEquipo($item['id']) as $red): ?>
-                                                                            <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
+                                                                                                                                                    <!--<a href="<?= utf8_encode($red['url']); ?>" target="_blank" class="text-white" title="<?= utf8_encode($red['red_social']); ?>"><i class="<?= utf8_encode($red['fontawesome']); ?>"></i></a>-->
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </div>
@@ -169,7 +169,7 @@
                                 <div class="team-overlay bg-extra-dark-gray3 opacity8"></div>
                             </div>
                             <figcaption>
-                                <div class="team-member-position margin-20px-top text-center">
+                                <div class="team-member-position text-center">
                                     <div class="text-small font-weight-500 text-extra-dark-gray text-uppercase"><?= utf8_encode($item['nombre']); ?></div>
                                     <div class="text-extra-small text-uppercase text-medium-gray"><?= utf8_encode($item['cargo']); ?></div>
                                 </div> 

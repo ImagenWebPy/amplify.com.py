@@ -40,7 +40,7 @@
                     </div>
                     <div class="text-extra-dark-gray text-uppercase text-small font-weight-600 alt-font margin-5px-bottom"><?= utf8_encode($this->contenido['titulo_telefono']) ?></div>
                     <p class="center-col"><?= utf8_encode($this->contenido['telefono']) ?></p>
-                    <a href="#" class="text-decoration-line-through-deep-pink text-uppercase text-deep-pink text-small margin-15px-top xs-margin-10px-top display-inline-block">call us</a>
+                    <!--<a href="#" class="text-decoration-line-through-deep-pink text-uppercase text-deep-pink text-small margin-15px-top xs-margin-10px-top display-inline-block">call us</a>-->
                 </div>
                 <!-- end contact info item -->
                 <!-- start contact info item -->

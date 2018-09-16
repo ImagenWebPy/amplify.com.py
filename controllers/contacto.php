@@ -17,7 +17,8 @@ class Contacto extends Controller {
         $this->view->logos = $this->helper->getLogos();
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
-
+        
+        $this->view->helper = $this->helper;
         $this->view->contenido = $this->model->contenido();
 
         $this->view->external_js = array("https://maps.googleapis.com/maps/api/js?key=AIzaSyB7fLf_oDK9bVgP3sgOuTVvR_BFrluHSik&callback=initMap");

@@ -16,3 +16,9 @@ body, a, p, span, div{ font-family: 'raleway' !important;}
 header nav .navbar-nav > li > a {margin: 0 5px !important; font-size: 10px !important;}
 .seccion2Font { font-size: 45px; }
 .enlaceEquipoEmail { color: #fff;}
+#player {
+    width: 100%;
+    position: absolute;
+    height: 100%; 
+    top: 0px;
+}

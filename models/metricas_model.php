@@ -9,6 +9,7 @@ class Metricas_Model extends Model {
     public function contenido() {
         $sql = $this->db->select("SELECT
                                         contenido,
+                                        videoId,
                                         header_img,
                                         header_titulo
                                 FROM

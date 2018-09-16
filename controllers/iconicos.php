@@ -19,7 +19,8 @@ class Iconicos extends Controller {
         #FIN PARAMETROS OBLIGATORIOS
 
         $this->view->contenido = $this->model->contenido();
-
+        $this->view->helper = $this->helper;
+        
         #cargamos la vista
         $this->view->render('header');
         $this->view->render('iconicos/index');

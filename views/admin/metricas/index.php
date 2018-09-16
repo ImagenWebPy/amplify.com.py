@@ -37,6 +37,12 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label>Youtube video ID</label>
+                                    <input type="text" name="videoId" class="form-control" value="<?= utf8_encode($this->datosMetricas['videoId']); ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label>Contenido</label>
                                     <textarea style="height:80px;" name="contenido" class="summernote"><?= utf8_encode($this->datosMetricas['contenido']); ?></textarea>
                                 </div>

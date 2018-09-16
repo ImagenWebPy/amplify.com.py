@@ -1,11 +1,9 @@
-<?php if (empty($this->pagina)): ?>
-    </div>
-<?php endif; ?>
 <!-- start footer --> 
 <footer class="footer-classic-dark bg-extra-dark-gray2 padding-five-bottom xs-padding-30px-bottom">
     <div class="bg-dark-footer padding-50px-tb xs-padding-30px-tb">
         <div class="container">
             <div class="row equalize xs-equalize-auto">
+                <div class="col-md-6 col-sm-6 col-xs-12">Powered by <a href="https://www.imagenwebhq.com" target="_blank" title="ImagenWeb"><img src="<?= URL; ?>public/images/iweb-logo-bn.png" alt="Imagen Web" style="position: relative; width: 130px; top: -2px;"></a></div>
                 <!-- start social media -->
                 <div class="col-md-4 col-sm-5 col-xs-12 col-xs-12 text-center display-table xs-text-center pull-right">
                     <div class="display-table-cell vertical-align-middle">
@@ -38,15 +36,6 @@
             </div>
         </div>
     </div>-->
-    <div class="container">
-        <div class="footer-bottom border-top border-color-medium-dark-gray padding-30px-top">
-            <div class="row">
-                <!-- start copyright -->
-                <div class="col-md-6 col-sm-6 col-xs-12 text-right text-small xs-text-center pull-right">Powered by <a href="https://www.imagenwebhq.com" target="_blank" title="ImagenWeb"><img src="<?= URL; ?>public/images/iweb-logo-bn.png" alt="Imagen Web" style="position: relative; width: 130px; top: -2px;"></a></div>
-                <!-- end copyright -->
-            </div>
-        </div>
-    </div>
 </footer>
 <!-- end footer -->
 <!-- start scroll to top -->

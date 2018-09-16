@@ -1,3 +1,44 @@
+<?php
+$page = $this->helper->getPage();
+$classInicio = '';
+$classPantallas = '';
+$classCarteles = '';
+$classIconicos = '';
+$classBuses = '';
+$classCobertura = '';
+$classMetricas = '';
+$classEmpresa = '';
+$classContacto = '';
+switch ($page[0]) {
+    case 'pantallas_led':
+        $classPantallas = 'class="active"';
+        break;
+    case 'carteles_tradicionales':
+        $classCarteles = 'active';
+        break;
+    case 'iconicos':
+        $classIconicos = 'class="active"';
+        break;
+    case 'buses':
+        $classBuses = 'class="active"';
+        break;
+    case 'cobertura':
+        $classCobertura = 'class="active"';
+        break;
+    case 'metricas':
+        $classMetricas = 'class="active"';
+        break;
+    case 'empresa':
+        $classEmpresa = 'class="active"';
+        break;
+    case 'contacto':
+        $classContacto = 'class="active"';
+        break;
+    default :
+        $classInicio = 'class="active"';
+        break;
+}
+?>
 <!doctype html>
 <html class="no-js" lang="es">
     <head>
@@ -62,13 +103,10 @@
         </script>
     </head>
     <body>
-            <?php if (empty($this->pagina)): ?>
-            <div class="box-layout">
-<?php endif; ?>
             <!-- start header -->
             <header>
                 <!-- start navigation -->
-                <nav class="navbar navbar-default bootsnav bg-transparent navbar-scroll-top header-light">
+                <nav class="navbar navbar-default bootsnav navbar-top header-light bg-transparent">
                     <div class="container nav-header-container">
                         <div class="row">
                             <div class="col-md-2 col-xs-5">
@@ -83,9 +121,9 @@
                                 </button>
                                 <div class="navbar-collapse collapse pull-right" id="navbar-collapse-toggle-1">
                                     <ul id="accordion" class="nav navbar-nav navbar-left no-margin alt-font text-normal" data-in="fadeIn" data-out="fadeOut">
-                                        <li><a href="<?= URL; ?>">Inicio</a></li>
-                                        <li><a href="<?= URL; ?>pantallas_led">Pantallas Led</a></li>
-                                        <li class="dropdown simple-dropdown">
+                                        <li <?= $classInicio; ?>><a href="<?= URL; ?>">Inicio</a></li>
+                                        <li <?= $classPantallas; ?>><a href="<?= URL; ?>pantallas_led">Pantallas Led</a></li>
+                                        <li class="dropdown simple-dropdown <?= $classCarteles; ?>">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);">Carteles Tradicionales</a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="<?= URL; ?>carteles_tradicionales/asuncion">Asunción</a></li>
@@ -94,12 +132,12 @@
                                                 <li><a href="<?= URL; ?>carteles_tradicionales/urbanos">Urbanos</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="<?= URL; ?>iconicos">Icónicos</a></li>
-                                        <li><a href="<?= URL; ?>buses">Buses</a></li>
-                                        <li><a href="<?= URL; ?>cobertura">Cobertura</a></li>
-                                        <li><a href="<?= URL; ?>metricas">Métricas</a></li>
-                                        <li><a href="<?= URL; ?>empresa">Empresa</a></li>
-                                        <li><a href="<?= URL; ?>contacto">Contacto</a></li>
+                                        <li <?= $classIconicos; ?>><a href="<?= URL; ?>iconicos">Icónicos</a></li>
+                                        <li <?= $classBuses; ?>><a href="<?= URL; ?>buses">Buses</a></li>
+                                        <li <?= $classCobertura; ?>><a href="<?= URL; ?>cobertura">Cobertura</a></li>
+                                        <li <?= $classMetricas; ?>><a href="<?= URL; ?>metricas">Métricas</a></li>
+                                        <li <?= $classEmpresa; ?>><a href="<?= URL; ?>empresa">Empresa</a></li>
+                                        <li <?= $classContacto; ?>><a href="<?= URL; ?>contacto">Contacto</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -107,7 +145,7 @@
                                 <div class="header-social-icon xs-display-none">
                                     <?php foreach ($this->redes as $item): ?>
                                         <a href="<?= utf8_encode($item['url']); ?>" title="<?= utf8_encode($item['descripcion']); ?>" target="_blank"><i class="<?= utf8_encode($item['fontawesome']); ?>" aria-hidden="true"></i></a>
-<?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>

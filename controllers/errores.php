@@ -17,7 +17,8 @@ class Errores extends Controller {
         $this->view->logos = $this->helper->getLogos();
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
-
+        
+        $this->view->helper = $this->helper;
         $this->view->contenido = $this->helper->getErrorContenido();
         $this->view->render('header');
         $this->view->render('error/index');

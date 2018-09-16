@@ -18,6 +18,8 @@ class Index extends Controller {
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
 
+        $this->view->helper = $this->helper;
+
         $this->view->slider = $this->helper->obtenerSlider();
         $this->view->index_seccion_1 = $this->helper->index_seccion_1();
         $this->view->index_seccion_2 = $this->helper->index_seccion_2();

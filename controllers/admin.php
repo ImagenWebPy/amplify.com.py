@@ -440,6 +440,7 @@ class Admin extends Controller {
         header('Content-type: application/json; charset=utf-8');
         $datos = array(
             'header_titulo' => (!empty($_POST['header_titulo'])) ? $this->helper->cleanInput($_POST['header_titulo']) : NULL,
+            'videoId' => (!empty($_POST['videoId'])) ? $this->helper->cleanInput($_POST['videoId']) : NULL,
             'contenido' => (!empty($_POST['contenido'])) ? $_POST['contenido'] : NULL
         );
         $data = $this->model->frmEditarMetricas($datos);

@@ -849,9 +849,9 @@ class Helper {
         }
 
         $data = array(
-            'description' => $title,
-            'keywords' => $description,
-            'title' => $keywords
+            'description' => $description,
+            'keywords' => $keywords,
+            'title' => $title
         );
         return $data;
     }

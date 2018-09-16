@@ -17,7 +17,8 @@ class Pantallas_led extends Controller {
         $this->view->logos = $this->helper->getLogos();
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
-
+        
+        $this->view->helper = $this->helper;
         $this->view->contenido = $this->model->contenido();
 
         #cargamos la vista

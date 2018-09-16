@@ -1734,6 +1734,7 @@ class Admin_Model extends Model {
     public function frmEditarMetricas($datos) {
         $update = array(
             'header_titulo' => utf8_decode($datos['header_titulo']),
+            'videoId' => utf8_decode($datos['videoId']),
             'contenido' => utf8_decode($datos['contenido'])
         );
         $this->db->update('metricas', $update, "id = 1");

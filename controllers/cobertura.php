@@ -17,7 +17,8 @@ class Cobertura extends Controller {
         $this->view->logos = $this->helper->getLogos();
         $this->view->footerInfo = $this->helper->getInfoFooter();
         #FIN PARAMETROS OBLIGATORIOS
-
+        
+        $this->view->helper = $this->helper;
         $this->view->contenido = $this->model->contenido();
         $this->view->ubicaciones = $this->model->ubicaciones();
 
